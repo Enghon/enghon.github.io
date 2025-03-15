@@ -176,17 +176,13 @@
         <!--<button class="visit-btn" onclick="showMessageBox()">查看消息</button>-->
 
     </div>
-    <span id="timeDate" style="color: #0033ff; text-align: center;background-color: #f0f0f0;font-size: 50px"></span>
-    <span id="times" style="color: deeppink;"></span>
     <p>当前 IP 地址：<span id="ip"></span></p>
     <span id="device">设备信息：</span>
     <!--
     <p style="text-align: center">扫一扫分享本网站，点击放大图片 </p>
         <img src="icon/QR.png" style="width: 250px; height: 250px; margin-top: 0px; display: block; margin-left: auto; margin-right: auto;" onclick="magnify(this.src)" alt="QR Code"> -->
 </div>
-<code style="font-size: 60px; color: blue; font-family: 'Courier New', Courier, monospace;">
 
-</code>
 
 
 
@@ -319,7 +315,7 @@
         if (String(snum).length == 1) {
             snum = "0" + snum;
         }
-        document.getElementById("timeDate").innerHTML = "️站长殷海，资源来自全网，version=2.8--have runned " + dnum + " 天";
+        document.getElementById("timeDate").innerHTML = "️version=2.8--have runned " + dnum + " 天";
         document.getElementById("times").innerHTML = hnum + "小时" + mnum + "分" + snum + "秒";
     }
 
@@ -382,12 +378,14 @@
 </script>
 
 
-<div id="hiddenElements" >
-
-    <input type="text" id="searchInput" placeholder="请输入搜索关键词模糊搜索">
+<div id="hiddenElements"  >
+<div style="display: flex; align-items: center; justify-content: center;">
+    <input type="text" id="searchInput" placeholder="模糊搜索" style="text-align: center;">
     <button id="searchButton" onclick="search()">搜索</button>
-  
+    
     <div id="searchResults">搜索内容会在页面闪烁</div>
+</div>
+ 
     <code id="link12"
           style=" background-color: rgba(253,158,158,0.09); padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(234,92,92,0.55);">
 
@@ -1210,7 +1208,8 @@
 
 
 </script>
-
+<span id="timeDate" style="color: #0033ff; text-align: center;background-color: #f0f0f0"></span>
+<span id="times" style="color: deeppink;"></span>
 </div>
 </body>
 </html>
