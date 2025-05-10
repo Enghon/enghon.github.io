@@ -2,7 +2,7 @@
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <title>网络布线模拟游戏</title>
+    <title>会东县职业技术学校网络布线模拟游戏</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
     <style>
         body {
@@ -172,13 +172,19 @@
     </style>
 </head>
 <body>
+
     <div id="gameContainer">
-        <div id="instruction"></div>
+
+        <div id="instruction">
+
+        </div>
+
 
         <!-- 网络设备 -->
         <div class="device" id="pc" style="left: 50px; bottom: 50px;">
             <i class="fa-solid fa-desktop"></i>
             <div class="label">计算机1</div>
+
         </div>
         <div class="device" id="switch1" style="left: 350px; bottom: 50px;">
             <i class="fa-solid fa-network-wired"></i>
@@ -189,6 +195,7 @@
             <div class="label">边界路由器</div>
         </div>
         <div class="device" id="internet" style="left: 350px; top: 50px;">
+
             <i class="fa-solid fa-globe"></i>
             <div class="label">互联网</div>
         </div>
@@ -224,20 +231,29 @@
         <svg id="svgLines" width="1000" height="800"></svg>
 
         <div class="button-group">
+
             <button class="hint-button" id="nextHint">提示下一步</button>
             <button class="hint-button" id="autoComplete">自动完成</button>
             <button class="hint-button" onclick="toggleLevelSelect()">关卡选择</button>
+
+
+
         </div>
+
     </div>
 
     <!-- 关卡选择界面 -->
     <div id="levelSelect">
         <div class="level-container">
+            <h4 style="width: 580px">会东县职业技术学校网络布线模拟游戏</h4>
             <h2>选择关卡（当前进度：<span id="currentProgress">1</span>/6）</h2>
             <div id="levelButtons"></div>
             <button onclick="toggleLevelSelect()" class="hint-button" style="margin-top: 20px;">返回游戏</button>
+            <h4 style="width: 580px">会东县职业技术学校网络布线模拟游戏</h4>
         </div>
+
     </div>
+
 
     <script>
         let currentLevel = 0;
@@ -249,7 +265,7 @@
 
         const levels = [
             {
-                instruction: "关卡1：建立基础网络：计算机 → 交换机 → 路由器 → 互联网",
+                instruction: "会东县职业技术学校网络布线模拟游戏关卡1：建立基础网络：计算机 → 交换机 → 路由器 → 互联网",
                 tasks: [
                     ["pc", "switch1"],
                     ["switch1", "router1"],
@@ -258,7 +274,7 @@
                 setup: () => showDevices(["pc","switch1","router1","internet"])
             },
             {
-                instruction: "关卡2：扩展无线网络：无线AP → 智能手机 → 连接交换机",
+                instruction: "会东县职业技术学校网络布线模拟游戏关卡2：扩展无线网络：无线AP → 智能手机 → 连接交换机",
                 tasks: [
                     ["wifiRouter", "phone"],
                     ["wifiRouter", "switch1"]
@@ -266,7 +282,7 @@
                 setup: () => showDevices(["wifiRouter","phone","switch1"])
             },
             {
-                instruction: "关卡3：添加安全设备：防火墙 → 路由器 → 互联网",
+                instruction: "会东县职业技术学校网络布线模拟游戏关卡3：添加安全设备：防火墙 → 路由器 → 互联网",
                 tasks: [
                     ["router1", "firewall"],
                     ["firewall", "internet"]
@@ -274,7 +290,7 @@
                 setup: () => showDevices(["router1","firewall","internet"])
             },
             {
-                instruction: "关卡4：连接办公设备：打印机和NAS → 核心交换机",
+                instruction: "会东县职业技术学校网络布线模拟游戏关卡4：连接办公设备：打印机和NAS → 核心交换机",
                 tasks: [
                     ["printer", "switch1"],
                     ["nas", "switch1"]
@@ -282,7 +298,7 @@
                 setup: () => showDevices(["printer","nas","switch1"])
             },
             {
-                instruction: "关卡5：智能家居联网：摄像头 → 无线AP，智能灯 → 无线AP",
+                instruction: "会东县职业技术学校网络布线模拟游戏关卡5：智能家居联网：摄像头 → 无线AP，智能灯 → 无线AP",
                 tasks: [
                     ["camera", "wifiRouter"],
                     ["smartLight", "wifiRouter"]
@@ -290,7 +306,7 @@
                 setup: () => showDevices(["camera","smartLight","wifiRouter"])
             },
             {
-                instruction: "关卡6：修复网络：  找出所有断开的必要连接",
+                instruction: "会东县职业技术学校网络布线模拟游戏关卡6：修复网络：  找出所有断开的必要连接",
                 tasks: [
                     ["pc", "switch1"],
                     ["switch1", "firewall"],
