@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+     <meta charset="UTF-8">
+    <title>WiFi 密码破解终端模拟器</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background-color: #1e1e1e;
+            color: #f0f0f0;
+            padding: 20px;
+            line-height: 1.5;
+            margin: 0;
+        }
+        .terminal-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .terminal {
+            background-color: #000;
+            border-radius: 5px;
+            padding: 15px;
+            height: 500px;
+            overflow-y: auto;
+        }
+        .command-line {
+            display: flex;
+            margin-bottom: 10px;
+        }
+        .prompt {
+            color: #569cd6;
+            margin-right: 10px;
+            white-space: nowrap;
+        }
+        .command-input {
+            background-color: transparent;
+            border: none;
+            color: #4ec9b0;
+            font-family: 'Courier New', monospace;
+            width: 100%;
+            outline: none;
+            caret-color: white;
+        }
+        .output {
+            color: #d4d4d4;
+            margin-bottom: 10px;
+            white-space: pre-wrap;
+        }
+        .success {
+            color: #4ec9b0;
+            font-weight: bold;
+        }
+        .highlight {
+            color: #c586c0;
+        }
+        .disclaimer {
+            color: #d7ba7d;
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #d7ba7d;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="terminal-container">
+        <h1 style="color: #569cd6;">WiFi 密码破解终端模拟器</h1>
+
+        <div class="terminal" id="terminal">
+            <div class="output">
+                Last login: Fri May 17 10:23:45 on console
+            </div>
+            <div class="command-line">
+                <span class="prompt">(base) mac@macdeMBP ~ %</span>
+                <input type="text" class="command-input" id="commandInput" autofocus>
+            </div>
+        </div>
+
+        <div class="disclaimer">
+
+        </div>
+    </div>
+
+    <script>
+        const terminal = document.getElementById('terminal');
+        const commandInput = document.getElementById('commandInput');
+
+        // 命令历史记录
+        const commandHistory = [];
+        let historyIndex = -1;
+
+        // 可用命令及其响应
+        const commands = {
+            'wifi-scan': `                            SSID BSSID             RSSI CHANNEL HT CC SECURITY (auth/unicast/group)
+                             5-2 8c:a6:df:e7:7f:fc -76  6,-1    Y  CN WPA(PSK/AES/AES) RSN(PSK/AES/AES)
+                    TP-LINK_A849 8c:a6:df:8b:a8:49 -74  6,-1    Y  CN WPA(PSK/AES/AES) RSN(PSK/AES/AES)
+                              ZX a4:c6:4f:bf:06:f4 -72  6       Y  CN WPA(PSK/TKIP,AES/TKIP) RSN(PSK/TKIP,AES/TKIP)
+                         CU_v365 28:a6:db:a2:31:c0 -71  1       Y  CN WPA(PSK/TKIP,AES/TKIP) RSN(PSK/TKIP,AES/TKIP)
+                         CU_s5W9 28:a6:db:a2:2e:80 -70  1       Y  CN WPA(PSK/TKIP,AES/TKIP) RSN(PSK/TKIP,AES/TKIP)
+                     Xiaomi-aamm c8:bf:4c:e5:9f:79 -68  6,+1    Y  CN RSN(PSK/AES/AES)
+                         CU_m8h7 34:e7:1c:61:9a:50 -66  2       Y  US WPA(PSK/TKIP,AES/TKIP) RSN(PSK/TKIP,AES/TKIP)
+                     Xiaomi_2CC4 d4:35:38:7c:35:31 -62  11      Y  -- RSN(PSK/AES/AES)
+                    MERCURY_2034 50:3a:a0:e1:20:34 -61  13,-1   Y  CN NONE
+                          <span class="highlight">殷海</span> dc:d8:7c:4c:5e:27 -23  2       Y  -- RSN(PSK/AES/AES)
+                          <span class="highlight">yh_5G</span> dc:d8:7c:4c:5e:26 -13  161     Y  -- RSN(PSK/AES/AES)`,
+
+            'key': '',
+
+            'sniff 2': `Capturing 802.11 frames on en0.
+^CSession saved to /tmp/airportSniffOTDHvh.cap.`,
+
+            'crack dc:d8:7c:4c:5e:27 /tmp/airportSniffOTDHvh.cap': `Reading packets, please wait...
+Opening /tmp/airportSniffOTDHvh.cap
+Read 3686 packets.
+
+1 potential targets
+
+
+
+                               Aircrack-ng 1.7
+
+      [00:00:58] 799318/799317 keys tested (13735.46 k/s)
+
+      Time left: 0 seconds                                      99.96%
+
+                                <span class="success">KEY FOUND! [12345678]</span>
+
+
+      Master Key     : 9A 99 98 08 6F 8E 94 D0 1F 9E E7 FE 87 56 67 B8
+                       D2 7F 63 4F 18 CE 30 8D 38 E3 47 36 23 C0 3E D3
+
+      Transient Key  : 77 03 76 7A 18 6F B1 55 1D 7D 28 15 03 9B 26 61
+                       C0 56 DA 7C F3 19 BA B6 A6 B4 BE CB 6E C5 70 94
+                       23 4F 19 90 BE DF 04 F4 8B FC AF 31 2E DD 76 30
+                       58 25 12 A3 06 85 4C FD 4B 2C 1F E8 5E 2D D5 E6
+
+      EAPOL HMAC     : 5A 13 FE CB A0 0C A5 E6 C9 FB 0D AA CF 1C D9 84`,
+
+            'help': `可用命令:
+wifi-scan      - 扫描附近的WiFi网络
+sniff [信道]   - 捕获指定信道的无线数据包
+key           -  加载密码本
+crack [BSSID] [捕获文件] - 尝试破解WiFi密码
+clear         - 清空终端
+help          - 显示帮助信息`,
+
+            'clear': ''
+        };
+
+        // 处理命令输入
+        commandInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                const command = commandInput.value.trim();
+                commandInput.value = '';
+
+                // 添加到历史记录
+                if (command) {
+                    commandHistory.push(command);
+                    historyIndex = commandHistory.length;
+                }
+
+                // 创建新的输出元素
+                const outputDiv = document.createElement('div');
+                outputDiv.className = 'output';
+                outputDiv.innerHTML = `<span class="prompt">(base) mac@macdeMBP ~ %</span> ${command}`;
+                terminal.insertBefore(outputDiv, commandInput.parentNode);
+
+                // 处理命令
+                if (command === 'clear') {
+                    // 清空终端
+                    const outputs = document.querySelectorAll('.output');
+                    outputs.forEach(output => {
+                        if (output !== outputDiv) {
+                            output.remove();
+                        }
+                    });
+                } else if (commands[command]) {
+                    // 已知命令
+                    const responseDiv = document.createElement('div');
+                    responseDiv.className = 'output';
+                    responseDiv.innerHTML = commands[command];
+                    terminal.insertBefore(responseDiv, commandInput.parentNode);
+                }
+
+                else if (command.startsWith('sniff ')) {
+                    // sniff 命令变体
+                    const responseDiv = document.createElement('div');
+                    responseDiv.className = 'output';
+                    responseDiv.innerHTML = commands['sniff 2'];
+                    terminal.insertBefore(responseDiv, commandInput.parentNode);
+                }
+                 else if (command.startsWith('key')) {
+                    // sniff 命令变体
+                    const responseDiv = document.createElement('div');
+                    responseDiv.className = 'output';
+                    responseDiv.innerHTML = commands['key'];
+                    terminal.insertBefore(responseDiv, commandInput.parentNode);
+                } else if (command) {
+                    // 未知命令
+                    const responseDiv = document.createElement('div');
+                    responseDiv.className = 'output';
+                    responseDiv.textContent = `-bash: ${command}: command not found`;
+                    terminal.insertBefore(responseDiv, commandInput.parentNode);
+                }
+
+                // 滚动到底部
+                terminal.scrollTop = terminal.scrollHeight;
+            } else if (e.key === 'ArrowUp') {
+                // 上箭头 - 历史记录上一条
+                e.preventDefault();
+                if (commandHistory.length > 0 && historyIndex > 0) {
+                    historyIndex--;
+                    commandInput.value = commandHistory[historyIndex];
+                }
+            } else if (e.key === 'ArrowDown') {
+                // 下箭头 - 历史记录下一条
+                e.preventDefault();
+                if (historyIndex < commandHistory.length - 1) {
+                    historyIndex++;
+                    commandInput.value = commandHistory[historyIndex];
+                } else {
+                    historyIndex = commandHistory.length;
+                    commandInput.value = '';
+                }
+            }
+        });
+
+        // 初始帮助信息
+        const helpDiv = document.createElement('div');
+        helpDiv.className = 'output';
+        helpDiv.innerHTML = `输入 <span style="color: #4ec9b0;">help</span> 查看可用命令`;
+        terminal.insertBefore(helpDiv, commandInput.parentNode);
+    </script>
+</body>
+</html>
