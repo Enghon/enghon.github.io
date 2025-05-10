@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>3D系统安装模拟器</title>
+    <style>
+        body {
+            margin: 0;
+            background: #1a1a1a;
+            color: #00ff00;
+            font-family: 'Consolas', monospace;
+        }
+        #terminal {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 600px;
+            height: 200px;
+            background: rgba(0,0,0,0.8);
+            padding: 15px;
+            overflow-y: auto;
+        }
+        .progress {
+            width: 400px;
+            height: 20px;
+            background: #333;
+            position: fixed;
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #00a8ff, #0097e6);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="progress">
+        <div class="progress-bar" id="installProgress"></div>
+    </div>
+    <div id="terminal"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // 初始化Three.js场景
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.height);
+        document.body.appendChild(renderer.domElement);
+
+        // 硬件可视化组件
+        function createHardwareModel() {
+            const geometry = new THREE.CylinderGeometry(5, 5, 2, 32);
+            const material = new THREE.MeshPhongMaterial({
+                color: 0x00ff00,
+                emissive: 0x003300,
+                specular: 0x555555,
+                shininess: 50
+            });
+            const disk = new THREE.Mesh(geometry, material);
+            scene.add(disk);
+            return disk;
+        }
+
+        // 动态分区管理
+        let partitions = [];
+        function createPartition(size) {
+            const partition = {
+                geometry: new THREE.BoxGeometry(size, 1, 1),
+                material: new THREE.MeshBasicMaterial({
+                    color: new THREE.Color().setHSL(Math.random(), 0.7, 0.5)
+                }),
+                position: partitions.reduce((acc, cur) => acc + cur.size, 0)
+            };
+            const mesh = new THREE.Mesh(partition.geometry, partition.material);
+            mesh.position.x = partition.position;
+            scene.add(mesh);
+            partitions.push({ size, mesh });
+        }
+
+        // 安装流程控制
+        const installSteps = [
+            {
+                name: "硬件初始化",
+                action: async () => {
+                    addLog("正在检测硬件配置...");
+                    await simulateHardwareScan();
+                }
+            },
+            {
+                name: "磁盘分区",
+                action: () => new Promise(resolve => {
+                    addLog("点击创建分区");
+                    document.addEventListener('click', function handler() {
+                        createPartition(Math.random() * 5 + 2);
+                        document.removeEventListener('click', handler);
+                        resolve();
+                    }, { once: true });
+                })
+            },
+            {
+                name: "系统安装",
+                action: async () => {
+                    addLog("正在复制系统文件...");
+                    await simulateFileTransfer();
+                }
+            }
+        ];
+
+        // 动画系统 [[83][30]]
+        function createParticleSystem() {
+            const particles = new THREE.BufferGeometry();
+            const positions = new Float32Array(1000 * 3);
+
+            for(let i=0; i<1000; i++) {
+                positions[i*3] = (Math.random() - 0.5) * 10;
+                positions[i*3+1] = (Math.random() - 0.5) * 10;
+                positions[i*3+2] = (Math.random() - 0.5) * 10;
+            }
+
+            particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            const material = new THREE.PointsMaterial({
+                size: 0.1,
+                color: 0x00ff00
+            });
+            return new THREE.Points(particles, material);
+        }
+
+        // 交互事件处理 [[47][102]]
+        document.addEventListener('mousemove', e => {
+            const mouse = new THREE.Vector2(
+                (e.clientX / window.innerWidth) * 2 - 1,
+                -(e.clientY / window.innerHeight) * 2 + 1
+            );
+            raycaster.setFromCamera(mouse, camera);
+        });
+
+        // 核心安装流程 [[7][30]]
+        let currentStep = 0;
+        const raycaster = new THREE.Raycaster();
+        const terminal = document.getElementById('terminal');
+        const progress = document.getElementById('installProgress');
+
+        async function startInstallation() {
+            const disk = createHardwareModel();
+            scene.add(createParticleSystem());
+
+            camera.position.z = 15;
+            const light = new THREE.AmbientLight(0x404040);
+            scene.add(light);
+
+            for (const step of installSteps) {
+                addLog(`>>> 开始阶段：${step.name}`);
+                await step.action();
+                progress.style.width = `${++currentStep/installSteps.length*100}%`;
+            }
+
+            addLog("系统安装完成！");
+        }
+
+        // 工具函数
+        function addLog(message) {
+            terminal.innerHTML += `> ${new Date().toLocaleTimeString()} ${message}<br>`;
+            terminal.scrollTop = terminal.scrollHeight;
+        }
+
+        function simulateHardwareScan() {
+            return new Promise(resolve => {
+                const interval = setInterval(() => {
+                    disk.rotation.x += 0.02;
+                    disk.rotation.y += 0.01;
+                    if(disk.rotation.x >= Math.PI*2) {
+                        clearInterval(interval);
+                        resolve();
+                    }
+                }, 16);
+            });
+        }
+
+        function simulateFileTransfer() {
+            return new Promise(resolve => {
+                let count = 0;
+                const files = ['kernel.sys', 'system32.dll', 'drivers.bin'];
+                const interval = setInterval(() => {
+                    addLog(`复制文件: ${files[count++ % 3]}`);
+                    if(count >= 10) {
+                        clearInterval(interval);
+                        resolve();
+                    }
+                }, 300);
+            });
+        }
+
+        // 启动安装
+        startInstallation();
+
+        // 渲染循环
+        function animate() {
+            requestAnimationFrame(animate);
+            renderer.render(scene, camera);
+        }
+        animate();
+    </script>
+</body>
+</html>

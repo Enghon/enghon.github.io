@@ -3,8 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>会东县职业技术学校网络布线模拟游戏</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"/>
     <style>
+/*        #tooltip {*/
+/*    font-family: Arial, sans-serif;*/
+/*    font-size: 14px;*/
+/*    max-width: 200px;*/
+/*    z-index: 1000;*/
+/*}*/
         body {
             margin: 0;
             padding: 0;
@@ -16,15 +22,17 @@
             justify-content: center;
             min-height: 100vh;
         }
+
         #gameContainer {
             position: relative;
             width: 1000px;
             height: 800px;
             background: #1e1e2e;
             border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
             overflow: hidden;
         }
+
         .device {
             position: absolute;
             text-align: center;
@@ -32,40 +40,71 @@
             color: #eee;
             transition: transform 0.2s;
         }
+
         .device:hover {
             transform: scale(1.1);
         }
+
         .device i {
             font-size: 60px;
         }
+
         .device .label {
             margin-top: 5px;
             font-size: 16px;
         }
-        .firewall i { color: #ff4444; }
-        .nas i { color: #44ff44; }
-        .printer i { color: #ffaa00; }
-        .camera i { color: #44aaff; }
-        .smart-home i { color: #aa44ff; }
+
+        .firewall i {
+            color: #ff4444;
+        }
+
+        .nas i {
+            color: #44ff44;
+        }
+
+        .printer i {
+            color: #ffaa00;
+        }
+
+        .camera i {
+            color: #44aaff;
+        }
+
+        .smart-home i {
+            color: #aa44ff;
+        }
+
         .wire {
             stroke: limegreen;
             stroke-width: 4;
             animation: pulse 2s infinite ease-in-out;
         }
+
         .wire.wifi {
             stroke: white;
             stroke-dasharray: 6;
             stroke-width: 3;
             animation: dash 4s linear infinite;
         }
+
         @keyframes pulse {
-            0% { stroke-opacity: 1; }
-            50% { stroke-opacity: 0.6; }
-            100% { stroke-opacity: 1; }
+            0% {
+                stroke-opacity: 1;
+            }
+            50% {
+                stroke-opacity: 0.6;
+            }
+            100% {
+                stroke-opacity: 1;
+            }
         }
+
         @keyframes dash {
-            to { stroke-dashoffset: -100; }
+            to {
+                stroke-dashoffset: -100;
+            }
         }
+
         #instruction {
             position: absolute;
             top: 10px;
@@ -73,6 +112,22 @@
             text-align: center;
             font-size: 18px;
             font-weight: bold;
+        }
+
+        #scoreBoard {
+            position: absolute;
+            top: 80px;
+            width: 100%;
+            text-align: center;
+            font-size: 28px;
+            color: #ffe400;
+        }
+#school {
+            position: absolute;
+            top: 30px;
+            width: 100%;
+            text-align: center;
+            font-size: 18px;
         }
         .button-group {
             position: absolute;
@@ -82,6 +137,7 @@
             display: flex;
             gap: 10px;
         }
+
         .hint-button {
             padding: 8px 16px;
             background: #283345;
@@ -92,54 +148,78 @@
             color: #fff;
             transition: background 0.3s;
         }
+
         .hint-button:hover {
             background: #3a455b;
         }
+
         #autoComplete {
             background: #2d572c;
         }
+
         #autoComplete:hover {
             background: #3d6b3c;
         }
+
         .highlight {
             animation: highlight 1.5s ease infinite;
         }
+
         @keyframes highlight {
-            0%, 100% { filter: drop-shadow(0 0 5px yellow); }
-            50% { filter: drop-shadow(0 0 15px gold); }
+            0%, 100% {
+                filter: drop-shadow(0 0 5px yellow);
+            }
+            50% {
+                filter: drop-shadow(0 0 15px gold);
+            }
         }
-        .error { animation: flashRed 0.5s 2; }
+
+        .error {
+            animation: flashRed 0.5s 2;
+        }
+
         @keyframes flashRed {
-            0%, 100% { color: #eee; }
-            50% { color: red; }
+            0%, 100% {
+                color: #eee;
+            }
+            50% {
+                color: red;
+            }
         }
-        /* 新增提示动画样式 */
+
         .highlight-pulse {
             animation: highlight-pulse 1.5s infinite;
         }
+
         @keyframes highlight-pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.4; }
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.4;
+            }
         }
+
         .path-guide {
             stroke: gold;
             stroke-width: 3;
             stroke-dasharray: 8;
             opacity: 0.7;
         }
-        /* 关卡选择样式 */
+
         #levelSelect {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.9);
+            background: rgba(0, 0, 0, 0.9);
             display: none;
             z-index: 1000;
             justify-content: center;
             align-items: center;
         }
+
         .level-container {
             background: #1e1e2e;
             padding: 30px;
@@ -147,6 +227,7 @@
             max-width: 600px;
             text-align: center;
         }
+
         .level-btn {
             margin: 10px;
             padding: 15px 30px;
@@ -158,13 +239,16 @@
             transition: all 0.3s;
             font-size: 16px;
         }
+
         .level-btn.unlocked {
             background: #2d572c;
         }
+
         .level-btn.unlocked:hover {
             background: #3d6b3c;
             transform: scale(1.05);
         }
+
         .level-btn.locked {
             cursor: not-allowed;
             opacity: 0.6;
@@ -172,417 +256,371 @@
     </style>
 </head>
 <body>
+<div id="gameContainer">
+    <div id="instruction"></div>
+    <div id="school" style="margin-top: 10px">会东县职业技术学校网络布线模拟游戏</div>
+    <div id="scoreBoard">得分: 0</div>
 
-    <div id="gameContainer">
-
-        <div id="instruction">
-
-        </div>
-
-
-        <!-- 网络设备 -->
-        <div class="device" id="pc" style="left: 50px; bottom: 50px;">
-            <i class="fa-solid fa-desktop"></i>
-            <div class="label">计算机1</div>
-
-        </div>
-        <div class="device" id="switch1" style="left: 350px; bottom: 50px;">
-            <i class="fa-solid fa-network-wired"></i>
-            <div class="label">核心交换机</div>
-        </div>
-        <div class="device" id="router1" style="left: 650px; bottom: 50px;">
-            <i class="fa-solid fa-server"></i>
-            <div class="label">边界路由器</div>
-        </div>
-        <div class="device" id="internet" style="left: 350px; top: 50px;">
-
-            <i class="fa-solid fa-globe"></i>
-            <div class="label">互联网</div>
-        </div>
-        <div class="device firewall" id="firewall" style="left: 500px; top: 100px; display: none;">
-            <i class="fa-solid fa-shield-halved"></i>
-            <div class="label">企业防火墙</div>
-        </div>
-        <div class="device nas" id="nas" style="left: 800px; top: 200px; display: none;">
-            <i class="fa-solid fa-database"></i>
-            <div class="label">NAS 存储</div>
-        </div>
-        <div class="device printer" id="printer" style="left: 100px; top: 200px; display: none;">
-            <i class="fa-solid fa-print"></i>
-            <div class="label">网络打印机</div>
-        </div>
-        <div class="device" id="wifiRouter" style="left: 200px; bottom: 50px; display: none;">
-            <i class="fa-solid fa-wifi"></i>
-            <div class="label">无线AP</div>
-        </div>
-        <div class="device" id="phone" style="left: 600px; bottom: 50px; display: none;">
-            <i class="fa-solid fa-mobile"></i>
-            <div class="label">智能手机</div>
-        </div>
-        <div class="device camera" id="camera" style="left: 200px; top: 400px; display: none;">
-            <i class="fa-solid fa-video"></i>
-            <div class="label">安防摄像头</div>
-        </div>
-        <div class="device smart-home" id="smartLight" style="left: 600px; top: 400px; display: none;">
-            <i class="fa-solid fa-lightbulb"></i>
-            <div class="label">智能灯具</div>
-        </div>
-
-        <svg id="svgLines" width="1000" height="800"></svg>
-
-        <div class="button-group">
-
-            <button class="hint-button" id="nextHint">提示下一步</button>
-            <button class="hint-button" id="autoComplete">自动完成</button>
-            <button class="hint-button" onclick="toggleLevelSelect()">关卡选择</button>
-
-
-
-        </div>
-
+    <div id="tooltip" style="display: none;  background: #333; color: red; padding: 2px; border-radius: 4px; pointer-events: none;font-size: medium"></div>
+    <!-- 网络设备 -->
+    <div class="device" id="pc" style="left: 50px; bottom: 50px;color: #b9ff7f"><i class="fa-solid fa-desktop"></i>
+        <div class="label">计算机</div>
     </div>
-
-    <!-- 关卡选择界面 -->
-    <div id="levelSelect">
-        <div class="level-container">
-            <h4 style="width: 580px">会东县职业技术学校网络布线模拟游戏</h4>
-            <h2>选择关卡（当前进度：<span id="currentProgress">1</span>/6）</h2>
-            <div id="levelButtons"></div>
-            <button onclick="toggleLevelSelect()" class="hint-button" style="margin-top: 20px;">返回游戏</button>
-            <h4 style="width: 580px">会东县职业技术学校网络布线模拟游戏</h4>
-        </div>
-
+    <div class="device" id="switch1" style="left: 350px; bottom: 50px;color: #0aa7fe"><i class="fa-solid fa-network-wired"></i>
+        <div class="label">核心交换机</div>
     </div>
+    <div class="device" id="router1" style="left: 650px; bottom: 50px;color: #f66783"><i class="fa-solid fa-server"></i>
+        <div class="label">边界路由器</div>
+    </div>
+    <div class="device" id="internet" style="left: 350px; top: 150px;color: #04f4a3"><i class="fa-solid fa-globe"></i>
+        <div class="label">互联网</div>
+    </div>
+    <div class="device firewall" id="firewall" style="left: 520px; top: 150px; display: none;"><i
+            class="fa-solid fa-shield-halved"></i>
+        <div class="label">企业防火墙</div>
+    </div>
+    <div class="device nas" id="nas" style="left: 800px; top: 200px; display: none;"><i
+            class="fa-solid fa-database"></i>
+        <div class="label">NAS 存储</div>
+    </div>
+    <div class="device printer" id="printer" style="left: 100px; top: 200px; display: none;"><i
+            class="fa-solid fa-print"></i>
+        <div class="label">网络打印机</div>
+    </div>
+    <div class="device" id="wifiRouter" style="left: 200px; bottom: 129px; display: none;color: #f87000"><i
+            class="fa-solid fa-wifi"></i>
+        <div class="label">无线AP</div>
+    </div>
+    <div class="device" id="phone" style="left: 20px; bottom: 50px; display: none;color: #ca9af3"><i class="fa-solid fa-mobile"></i>
+        <div class="label">智能手机</div>
+    </div>
+    <div class="device camera" id="camera" style="left: 200px; top: 400px; display: none;"><i
+            class="fa-solid fa-video"></i>
+        <div class="label">安防摄像头</div>
+    </div>
+    <div class="device smart-home" id="smartLight" style="left: 600px; top: 400px; display: none;"><i
+            class="fa-solid fa-lightbulb"></i>
+        <div class="label">智能灯具</div>
+    </div>
+    <svg id="svgLines" width="1000" height="800"></svg>
+    <div class="button-group">
+        <button class="hint-button" id="nextHint">提示下一步</button>
+        <button class="hint-button" id="autoComplete">自动完成</button>
+        <button class="hint-button" onclick="toggleLevelSelect()">关卡选择</button>
+    </div>
+</div>
 
+<div id="levelSelect">
+    <div class="level-container">
+        <h4>会东县职业技术学校网络布线模拟游戏</h4>
+        <h2>选择关卡（当前进度：<span id="currentProgress">1</span>/6）</h2>
+        <div id="levelButtons"></div>
+        <button onclick="toggleLevelSelect()" class="hint-button" style="margin-top: 20px;">返回游戏</button>
+    </div>
+</div>
 
-    <script>
-        let currentLevel = 0;
-        let currentTaskIndex = 0;
-        let dragging = false;
-        let startDevice = null;
-        let line = null;
-        let unlockedLevels = 1;
+<script>
+    let currentLevel = 0, currentTaskIndex = 0, dragging = false, startDevice = null, line = null, unlockedLevels = 1,
+        score = 0;
+    const levels = [
+        {
+            instruction: "关卡1：计算机 → 交换机 → 路由器 → 互联网",
+            tasks: [["pc", "switch1"], ["switch1", "router1"], ["router1", "internet"]],
+            setup: () => showDevices(["pc", "switch1", "router1", "internet"])
+        },
+        {
+            instruction: "关卡2：智能手机 → 无线AP → 交换机",
+            tasks: [["phone", "wifiRouter"], ["wifiRouter", "switch1"]],
+            setup: () => showDevices(["phone", "wifiRouter", "switch1"])
+        },
+        {
+            instruction: "关卡3：路由器 → 防火墙 → 互联网",
+            tasks: [["router1", "firewall"], ["firewall", "internet"]],
+            setup: () => showDevices(["router1", "firewall", "internet"])
+        },
+        {
+            instruction: "关卡4：打印机 & NAS → 交换机",
+            tasks: [["printer", "switch1"], ["nas", "switch1"]],
+            setup: () => showDevices(["printer", "nas", "switch1"])
+        },
+        {
+            instruction: "关卡5：摄像头 & 灯具 → 无线AP",
+            tasks: [["camera", "wifiRouter"], ["smartLight", "wifiRouter"]],
+            setup: () => showDevices(["camera", "smartLight", "wifiRouter"])
+        },
+        {
+            instruction: "关卡6：修复所有必要连接",
+            tasks: [["pc", "switch1"], ["switch1", "router1"], ["router1", "firewall"], ["firewall", "internet"], ["wifiRouter", "switch1"]],
+            setup: () => showDevices(["pc", "switch1", "router1", "firewall", "internet", "wifiRouter"])
+        },
+    ];
 
-        const levels = [
-            {
-                instruction: "会东县职业技术学校网络布线模拟游戏关卡1：建立基础网络：计算机 → 交换机 → 路由器 → 互联网",
-                tasks: [
-                    ["pc", "switch1"],
-                    ["switch1", "router1"],
-                    ["router1", "internet"]
-                ],
-                setup: () => showDevices(["pc","switch1","router1","internet"])
-            },
-            {
-                instruction: "会东县职业技术学校网络布线模拟游戏关卡2：扩展无线网络：无线AP → 智能手机 → 连接交换机",
-                tasks: [
-                    ["wifiRouter", "phone"],
-                    ["wifiRouter", "switch1"]
-                ],
-                setup: () => showDevices(["wifiRouter","phone","switch1"])
-            },
-            {
-                instruction: "会东县职业技术学校网络布线模拟游戏关卡3：添加安全设备：防火墙 → 路由器 → 互联网",
-                tasks: [
-                    ["router1", "firewall"],
-                    ["firewall", "internet"]
-                ],
-                setup: () => showDevices(["router1","firewall","internet"])
-            },
-            {
-                instruction: "会东县职业技术学校网络布线模拟游戏关卡4：连接办公设备：打印机和NAS → 核心交换机",
-                tasks: [
-                    ["printer", "switch1"],
-                    ["nas", "switch1"]
-                ],
-                setup: () => showDevices(["printer","nas","switch1"])
-            },
-            {
-                instruction: "会东县职业技术学校网络布线模拟游戏关卡5：智能家居联网：摄像头 → 无线AP，智能灯 → 无线AP",
-                tasks: [
-                    ["camera", "wifiRouter"],
-                    ["smartLight", "wifiRouter"]
-                ],
-                setup: () => showDevices(["camera","smartLight","wifiRouter"])
-            },
-            {
-                instruction: "会东县职业技术学校网络布线模拟游戏关卡6：修复网络：找出所有断开的必要连接",
-                tasks: [
-                    ["pc", "switch1"],
-                    ["switch1", "firewall"],
-                    ["firewall", "router1"],
-                    ["router1", "internet"],
-                    ["wifiRouter", "switch1"]
-                ],
-                setup: () => showDevices(["pc","switch1","firewall","router1","internet","wifiRouter"])
-            }
-        ];
+    function showDevices(ids) {
+        document.querySelectorAll('.device').forEach(el => el.style.display = 'none');
+        ids.forEach(id => document.getElementById(id).style.display = 'block');
+    }
 
-        // 设备显示控制
-        function showDevices(ids) {
-            document.querySelectorAll('.device').forEach(el => el.style.display = 'none');
-            ids.forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.style.display = 'block';
-            });
+    function initLevel(i) {
+        currentLevel = i;
+        currentTaskIndex = 0;
+        document.getElementById('svgLines').innerHTML = '';
+        document.getElementById('instruction').textContent = levels[i].instruction;
+        showScore();
+        levels[i].setup();
+    }
+
+    function updateScore(p) {
+        score += p;
+        showScore();
+    }
+
+    function showScore() {
+        document.getElementById('scoreBoard').textContent = `得分: ${score}`;
+    }
+
+    function completeLevel() {
+       // 如果是最后一关（第6关），直接加100分减去前面5关的总分(83分)
+    if (currentLevel === levels.length - 1) {
+        updateScore(100 - 16.6 * 5); // 100 - 83 = 17
+    } else {
+        updateScore(16.6);
+    }
+
+    unlockedLevels = Math.max(unlockedLevels, currentLevel + 2);
+    setTimeout(() => {
+        if (currentLevel < levels.length - 1) {
+            alert(`恭喜你!关卡${currentLevel + 1}完成，目前总得${score}分，游戏总分${100}`);
+            initLevel(currentLevel + 1);
+        } else {
+            alert(`恭喜完成，共得100分,你真棒!`);
         }
+    }, 500);
+    updateLevelSelect();
+    }
 
-        // 初始化关卡
-        function initLevel(levelIndex) {
-            currentLevel = levelIndex;
-            currentTaskIndex = 0;
-            document.getElementById("svgLines").innerHTML = '';
-            const lvl = levels[levelIndex];
-            document.getElementById("instruction").textContent = lvl.instruction;
-            lvl.setup();
+
+
+
+
+    function startDragHandler(e) {
+        if (!dragging && currentTaskIndex < levels[currentLevel].tasks.length) {
+            e.preventDefault();
+            const point = e.touches ? e.touches[0] : e;
+            startDrag(this, point.clientX, point.clientY);
         }
+    }
 
-        // 设备拖拽事件处理
-        document.querySelectorAll('.device').forEach(el => {
-            el.addEventListener('mousedown', startDragHandler);
-            el.addEventListener('touchstart', startDragHandler, { passive: false });
+    function startDrag(el, x, y) {
+        dragging = true;
+        startDevice = el;
+        const pos = getDeviceCenter(el);
+        line = createLine(pos.x, pos.y);
+        document.addEventListener('mousemove', dragMove);
+        document.addEventListener('mouseup', endDrag);
+        document.addEventListener('touchmove', touchMove);
+        document.addEventListener('touchend', endDrag);
+    }
+
+    function touchMove(e) {
+        e.preventDefault();
+        dragMove(e.touches[0]);
+    }
+
+    function dragMove(e) {
+        if (line) {
+            const c = document.getElementById('gameContainer').getBoundingClientRect();
+            line.setAttribute('x2', e.clientX - c.left);
+            line.setAttribute('y2', e.clientY - c.top);
+        }
+    }
+
+    function endDrag(e) {
+        dragging = false;
+        document.removeEventListener('mousemove', dragMove);
+        document.removeEventListener('mouseup', endDrag);
+        document.removeEventListener('touchmove', touchMove);
+        document.removeEventListener('touchend', endDrag);
+        const evt = e.changedTouches ? e.changedTouches[0] : e;
+        const target = document.elementFromPoint(evt.clientX, evt.clientY)?.closest('.device');
+        if (target && target !== startDevice) verifyConnection(startDevice, target); else line.remove();
+        line = null;
+    }
+
+    function verifyConnection(f, t) {
+        const [a, b] = levels[currentLevel].tasks[currentTaskIndex];
+        const ok = (f.id === a && t.id === b) || (f.id === b && t.id === a);
+        if (ok) {
+            finalizeConnection(f, t);
+            currentTaskIndex++;
+            if (currentTaskIndex >= levels[currentLevel].tasks.length) completeLevel();
+        } else {
+            line.remove();
+            flashError(f, t);
+        }
+    }
+
+    function finalizeConnection(f, t) {
+        const p1 = getDeviceCenter(f), p2 = getDeviceCenter(t);
+        line.setAttribute('x1', p1.x);
+        line.setAttribute('y1', p1.y);
+        line.setAttribute('x2', p2.x);
+        line.setAttribute('y2', p2.y);
+    }
+
+    function flashError(f, t) {
+        [f, t].forEach(el => el.classList.add('error'));
+        setTimeout(() => [f, t].forEach(el => el.classList.remove('error')), 1000);
+    }
+
+    function createLine(x, y) {
+        const l = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        l.setAttribute('x1', x);
+        l.setAttribute('y1', y);
+        l.setAttribute('x2', x);
+        l.setAttribute('y2', y);
+        l.classList.add('wire');
+        if (startDevice.id.includes('wifi') || startDevice.id.includes('phone')) l.classList.add('wifi');
+        document.getElementById('svgLines').appendChild(l);
+        return l;
+    }
+
+    function showNextHint() {
+        if (currentTaskIndex >= levels[currentLevel].tasks.length) return;
+        const [a, b] = levels[currentLevel].tasks[currentTaskIndex];
+        ['highlight', 'highlight-pulse'].forEach(c => {
         });
+        highlight(a);
+        highlight(b);
+        guidePath(a, b);
+    }
 
-        function startDragHandler(e) {
-            e.preventDefault();
-            if (!dragging && currentTaskIndex < levels[currentLevel].tasks.length) {
-                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-                startDrag(e, this, clientX, clientY);
-            }
-        }
+    function highlight(id) {
+        const e = document.getElementById(id);
+        e.classList.add('highlight');
+        setTimeout(() => e.classList.remove('highlight'), 2000);
+    }
 
-        function startDrag(e, el, clientX, clientY) {
-            dragging = true;
-            startDevice = el;
-            const containerRect = document.getElementById('gameContainer').getBoundingClientRect();
-            const { x, y } = getDeviceCenter(el);
+    function guidePath(a, b) {
+        const p1 = getDeviceCenter(document.getElementById(a)), p2 = getDeviceCenter(document.getElementById(b));
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('d', `M${p1.x},${p1.y} L${p2.x},${p2.y}`);
+        path.setAttribute('class', 'path-guide');
+        document.getElementById('svgLines').appendChild(path);
+        setTimeout(() => path.remove(), 2000);
+    }
 
-            line = createLine(x, y);
-            document.addEventListener('mousemove', dragMove);
-            document.addEventListener('mouseup', endDrag);
-            document.addEventListener('touchmove', touchMove);
-            document.addEventListener('touchend', endDrag);
-        }
+    function autoCompleteLevel() {
+        levels[currentLevel].tasks.slice(currentTaskIndex).forEach(([a, b]) => {
+            const e1 = document.getElementById(a), e2 = document.getElementById(b);
+            const p1 = getDeviceCenter(e1), p2 = getDeviceCenter(e2);
+            const l = createLine(p1.x, p1.y);
+            finalizeConnection(e1, e2);
+        });
+        currentTaskIndex = levels[currentLevel].tasks.length;
+        completeLevel();
+    }
 
-        function touchMove(e) {
-            e.preventDefault();
-            dragMove(e.touches[0]);
-        }
-
-        function dragMove(e) {
-            if (line) {
-                const containerRect = document.getElementById('gameContainer').getBoundingClientRect();
-                line.setAttribute("x2", e.clientX - containerRect.left);
-                line.setAttribute("y2", e.clientY - containerRect.top);
-            }
-        }
-
-        function endDrag(e) {
-            dragging = false;
-            document.removeEventListener('mousemove', dragMove);
-            document.removeEventListener('mouseup', endDrag);
-            document.removeEventListener('touchmove', touchMove);
-            document.removeEventListener('touchend', endDrag);
-
-            const target = document.elementFromPoint(
-                e.clientX || (e.changedTouches[0].clientX),
-                e.clientY || (e.changedTouches[0].clientY)
-            )?.closest('.device');
-
-            if (target && target !== startDevice) {
-                verifyConnection(startDevice, target);
-            } else {
-                line.remove();
-            }
-            line = null;
-        }
-
-        function verifyConnection(from, to) {
-            const task = levels[currentLevel].tasks[currentTaskIndex];
-            const isValid = task && (
-                (from.id === task[0] && to.id === task[1]) ||
-                (from.id === task[1] && to.id === task[0])
-            );
-
-            if (isValid) {
-                finalizeConnection(from, to);
-                if (++currentTaskIndex >= levels[currentLevel].tasks.length) {
-                    completeLevel();
-                }
-            } else {
-                line.remove();
-                showErrorFeedback(from, to);
-            }
-        }
-
-        function completeLevel() {
-            if (currentLevel === 5) {
-                const correct = levels[currentLevel].tasks.every(task => {
-                    return Array.from(document.querySelectorAll('.wire')).some(line => {
-                        const startId = getDeviceFromPosition(line.x1.baseVal.value, line.y1.baseVal.value)?.id;
-                        const endId = getDeviceFromPosition(line.x2.baseVal.value, line.y2.baseVal.value)?.id;
-                        return (startId === task[0] && endId === task[1]) ||
-                               (startId === task[1] && endId === task[0]);
-                    });
-                });
-
-                if (correct) {
-                    alert("恭喜完成所有网络配置！");
-                    unlockedLevels = Math.max(unlockedLevels, 6);
-                }
-            } else {
-                unlockedLevels = Math.max(unlockedLevels, currentLevel + 2);
-                setTimeout(() => {
-                    if (currentLevel < levels.length - 1) {
-                        alert("关卡完成！进入下一关");
-                        initLevel(currentLevel + 1);
-                    }
-                }, 500);
-            }
-            updateLevelSelect();
-        }
-
-        function showErrorFeedback(from, to) {
-            from.classList.add('error');
-            to.classList.add('error');
-            setTimeout(() => {
-                from.classList.remove('error');
-                to.classList.remove('error');
-            }, 1000);
-        }
-
-        function createLine(x, y) {
-            const newLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
-            newLine.setAttribute("x1", x);
-            newLine.setAttribute("y1", y);
-            newLine.setAttribute("x2", x);
-            newLine.setAttribute("y2", y);
-            newLine.classList.add('wire');
-            if (startDevice.id.includes('wifi') || startDevice.id.includes('phone')) {
-                newLine.classList.add('wifi');
-            }
-            document.getElementById("svgLines").appendChild(newLine);
-            return newLine;
-        }
-
-        function finalizeConnection(from, to) {
-            const fromPos = getDeviceCenter(from);
-            const toPos = getDeviceCenter(to);
-
-            line.setAttribute("x1", fromPos.x);
-            line.setAttribute("y1", fromPos.y);
-            line.setAttribute("x2", toPos.x);
-            line.setAttribute("y2", toPos.y);
-        }
-
-        // 新增提示功能
-        function showNextHint() {
-            if (currentTaskIndex >= levels[currentLevel].tasks.length) return;
-
-            const task = levels[currentLevel].tasks[currentTaskIndex];
-            const [deviceA, deviceB] = task;
-
-            highlightDevice(deviceA);
-            highlightDevice(deviceB);
-
-            const startEl = document.getElementById(deviceA);
-            const endEl = document.getElementById(deviceB);
-            animateHintPath(startEl, endEl);
-        }
-
-        function highlightDevice(id) {
-            const el = document.getElementById(id);
-            el.classList.add('highlight');
-            setTimeout(() => el.classList.remove('highlight'), 2000);
-        }
-
-        function animateHintPath(startEl, endEl) {
-            const startPos = getDeviceCenter(startEl);
-            const endPos = getDeviceCenter(endEl);
-
-            const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-            path.setAttribute('d', `M${startPos.x},${startPos.y} L${endPos.x},${endPos.y}`);
-            path.style.stroke = 'gold';
-            path.style.strokeWidth = '3px';
-            path.style.strokeDasharray = '8';
-            path.style.animation = 'dash 1.5s linear infinite';
-
-            document.getElementById('svgLines').appendChild(path);
-            setTimeout(() => path.remove(), 2000);
-        }
-
-        // 新增自动完成功能
-        function autoCompleteLevel() {
-            const currentTasks = levels[currentLevel].tasks.slice(currentTaskIndex);
-
-            currentTasks.forEach(([srcId, destId]) => {
-                const srcEl = document.getElementById(srcId);
-                const destEl = document.getElementById(destId);
-                const {x: x1, y: y1} = getDeviceCenter(srcEl);
-                const {x: x2, y: y2} = getDeviceCenter(destEl);
-
-                const line = createLine(x1, y1);
-                line.setAttribute('x2', x2);
-                line.setAttribute('y2', y2);
-                finalizeConnection(srcEl, destEl);
-            });
-
-            currentTaskIndex = levels[currentLevel].tasks.length;
-            completeLevel();
-        }
-
-        // 关卡选择功能
-        function toggleLevelSelect() {
-            const select = document.getElementById('levelSelect');
-            select.style.display = select.style.display === 'none' ? 'flex' : 'none';
-            updateLevelSelect();
-        }
-
-        function updateLevelSelect() {
-            const container = document.getElementById('levelButtons');
-            container.innerHTML = '';
-
-            levels.forEach((_, index) => {
-                const btn = document.createElement('button');
-                btn.className = `level-btn ${index < unlockedLevels ? 'unlocked' : 'locked'}`;
-                btn.textContent = `关卡 ${index + 1}`;
-                btn.onclick = () => {
-                    if (index < unlockedLevels) {
-                        initLevel(index);
-                        toggleLevelSelect();
-                    }
-                };
-                container.appendChild(btn);
-            });
-            document.getElementById('currentProgress').textContent = unlockedLevels;
-        }
-
-        // 辅助函数
-        function getDeviceCenter(el) {
-            const rect = el.getBoundingClientRect();
-            const containerRect = document.getElementById('gameContainer').getBoundingClientRect();
-            return {
-                x: rect.left - containerRect.left + rect.width / 2,
-                y: rect.top - containerRect.top + rect.height / 2
-            };
-        }
-
-        function getDeviceFromPosition(x, y) {
-            return Array.from(document.querySelectorAll('.device')).find(device => {
-                const pos = getDeviceCenter(device);
-                return Math.abs(pos.x - x) < 40 && Math.abs(pos.y - y) < 40;
-            });
-        }
-
-        // 初始化游戏
-        initLevel(0);
+    function toggleLevelSelect() {
+        const s = document.getElementById('levelSelect');
+        s.style.display = s.style.display === 'none' ? 'flex' : 'none';
         updateLevelSelect();
-        document.getElementById('nextHint').addEventListener('click', showNextHint);
-        document.getElementById('autoComplete').addEventListener('click', autoCompleteLevel);
-        document.addEventListener('keypress', (e) => {
-            if (e.key.toLowerCase() === 'l') toggleLevelSelect();
+    }
+
+    function updateLevelSelect() {
+        const c = document.getElementById('levelButtons');
+        c.innerHTML = '';
+        levels.forEach((_, i) => {
+            const b = document.createElement('button');
+            b.className = `level-btn ${i < unlockedLevels ? 'unlocked' : 'locked'}`;
+            b.textContent = `关卡 ${i + 1}`;
+            b.onclick = () => {
+                if (i < unlockedLevels) {
+                    initLevel(i);
+                    toggleLevelSelect();
+                }
+            };
+            c.appendChild(b);
         });
-    </script>
+        document.getElementById('currentProgress').textContent = unlockedLevels;
+    }
+
+    function getDeviceCenter(el) {
+        const r = el.getBoundingClientRect(), c = document.getElementById('gameContainer').getBoundingClientRect();
+        return {x: r.left - c.left + r.width / 2, y: r.top - c.top + r.height / 2};
+    }
+
+    document.querySelectorAll('.device').forEach(el => {
+        el.addEventListener('mousedown', startDragHandler);
+        el.addEventListener('touchstart', startDragHandler, {passive: false});
+    });
+    initLevel(0);
+    updateLevelSelect();
+    document.getElementById('nextHint').addEventListener('click', showNextHint);
+    document.getElementById('autoComplete').addEventListener('click', autoCompleteLevel);
+    const tooltip = document.getElementById('tooltip');
+const devices = document.querySelectorAll('.device');
+
+devices.forEach(device => {
+    device.addEventListener('mouseover', (e) => {
+        const deviceName = device.querySelector('.label').textContent;
+        let description = '';
+
+        switch (device.id) {
+            case 'pc':
+                description = '：用于办公、上网、运行应用程序。';
+                break;
+            case 'switch1':
+                description = '：负责局域网内设备的数据交换。';
+                break;
+            case 'router1':
+                description = '：连接内部网络与外部互联网。';
+                break;
+            case 'internet':
+                description = '：全球网络，提供外部资源访问。';
+                break;
+            case 'firewall':
+                description = '：保护内部网络免受外部攻击。';
+                break;
+            case 'nas':
+                description = '：网络存储设备，用于文件共享和备份。';
+                break;
+            case 'printer':
+                description = '：支持局域网内多用户共享打印。';
+                break;
+            case 'wifiRouter':
+                description = '：提供Wi-Fi接入，连接移动设备。';
+                break;
+            case 'phone':
+                description = '：可连接Wi-Fi或移动网络进行通信。';
+                break;
+            case 'camera':
+                description = '：监控环境，支持远程查看。';
+                break;
+            case 'smartLight':
+                description = '：可通过手机或语音控制开关和亮度。';
+                break;
+            default:
+                description = '未知设备';
+        }
+
+        tooltip.textContent = `${deviceName}\n${description}`;
+        tooltip.style.display = 'block';
+        tooltip.style.left = `${e.clientX + 10}px`;
+        tooltip.style.top = `${e.clientY + 10}px`;
+    });
+
+    device.addEventListener('mouseout', () => {
+        tooltip.style.display = 'none';
+    });
+});
+
+// 让 tooltip 跟随鼠标移动
+document.addEventListener('mousemove', (e) => {
+    if (tooltip.style.display === 'block') {
+        tooltip.style.left = `${e.clientX + 10}px`;
+        tooltip.style.top = `${e.clientY + 10}px`;
+    }
+});
+</script>
 </body>
 </html>
