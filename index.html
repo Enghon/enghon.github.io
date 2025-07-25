@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>我的主页</title>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC&family=Noto+Sans+SC&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
@@ -18,11 +18,13 @@
     }
 
     .container {
-      background: rgba(255, 255, 255, 0.9);
+      background: rgba(255, 255, 255, 0.95);
       padding: 40px 60px;
       border-radius: 20px;
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
       text-align: center;
+      max-width: 360px;
+      width: 90%;
     }
 
     h1 {
@@ -34,7 +36,7 @@
     .button {
       display: block;
       width: 220px;
-      margin: 15px auto;
+      margin: 16px auto;
       padding: 15px 0;
       background-color: #4a90e2;
       color: white;
@@ -42,23 +44,106 @@
       border-radius: 30px;
       font-size: 1.1em;
       text-decoration: none;
-      transition: all 0.3s ease;
+      text-align: center;
+      cursor: pointer;
+      font-family: 'Noto Sans SC', sans-serif;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      user-select: none;
+      transition: background-color 0.25s ease;
     }
 
     .button:hover {
       background-color: #357ABD;
       transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+    }
+
+    .fake-button {
+      background-color: #999 !important;
+      cursor: not-allowed !important;
+      box-shadow: none !important;
+      color: #ddd !important;
+      pointer-events: none;
+      user-select: none;
     }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>欢迎访问我的主页</h1>
-    <a class="button" href="ziyuan.html" target="_blank">资源搜藏</a>
-    <a class="button" href="http://110.42.111.241:28432/" target="_blank">飞牛nas</a>
-    <a class="button" href="http://110.42.111.241:28431" target="_blank">证件照</a>
-    <a class="button" href="http://110.42.111.241:28430/btpanel" target="_blank">宝塔</a>
-  </div>
+    <a id="btn1" class="button" href="javascript:void(0);" target="_blank">📁 资源搜藏</a>
+    <a id="btn2" class="button" href="javascript:void(0);" target="_blank">🖥️ 飞牛nas</a>
+    <a id="btn3" class="button" href="javascript:void(0);" target="_blank">📷 证件照</a>
+    <a id="btn4" class="button" href="javascript:void(0);" target="_blank">🛠️ 宝塔</a>
+
+
+
+  <script>
+    const links = {
+      btn1: btoa('eml5dWFuLmh0bWw='), 
+      btn2: btoa('aHR0cDovLzExMC40Mi4xMTEuMjQxOjI4NDMyLw=='), 
+      btn3: btoa('aHR0cDovLzExMC40Mi4xMTEuMjQxOjI4NDMx'), 
+      btn4: btoa('aHR0cDovLzExMC40Mi4xMTEuMjQxOjI4NDMwL2J0cGFuZWw=')
+    };
+
+    function openDecodedUrl(id) {
+      const doubleEncoded = links[id];
+      if (!doubleEncoded) return;
+      const singleEncoded = atob(doubleEncoded);
+      const url = atob(singleEncoded);
+      window.open(url, '_blank');
+    }
+
+    function obscureEncrypt(str) {
+      let res = '';
+      for(let i=0; i<str.length; i++) {
+        let c = str.charCodeAt(i);
+        c = ((c << 3) | (c >> 5)) & 0xFF;
+        c = c ^ 0x5C;
+        res += String.fromCharCode(c);
+      }
+      return res.split('').reverse().join('');
+    }
+
+    function getObscureDatePwd() {
+      const d = new Date();
+      let mm = d.getMonth() + 1;
+      let dd = d.getDate();
+      let s = (mm<10?'0':'') + mm + (dd<10?'0':'') + dd;
+      s = obscureEncrypt(s);
+      return s;
+    }
+
+    function fakeVerifyPwd(input) {
+      const encInput = obscureEncrypt(input);
+      const encToday = getObscureDatePwd();
+
+      let flag = false;
+      for(let i=0; i<encInput.length; i++) {
+        flag = !flag;
+      }
+      if(flag || encInput === encToday) {
+        return true;
+      }
+      return false;
+    }
+
+    document.getElementById('btn1').addEventListener('click', () => {
+      openDecodedUrl('btn1');
+    });
+
+    ['btn2','btn3','btn4'].forEach(id => {
+      document.getElementById(id).addEventListener('click', () => {
+        const pwd = prompt('请输入密码访问该链接：');
+        if(pwd === null) return;
+        if(fakeVerifyPwd(pwd)) {
+          openDecodedUrl(id);
+        } else {
+          alert('密码错误，无法访问链接！');
+        }
+      });
+    });
+
+  </script>
 </body>
 </html>
