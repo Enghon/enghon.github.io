@@ -76,6 +76,7 @@
     <a id="btn3" class="button" href="javascript:void(0);" target="_blank">📷 证件照</a>
     <a id="btn4" class="button" href="javascript:void(0);" target="_blank">🛠️ 宝塔</a>
     <a id="btn5" class="button" href="javascript:void(0);" target="_blank">博客</a>
+    <a id="btn6" class="button" href="javascript:void(0);" target="_blank">网盘</a>
 
 
 
@@ -86,15 +87,14 @@
       btn2: btoa('aHR0cDovLzExMC40Mi4xMTEuMjQxOjI4NDMyLw=='), 
       btn3: btoa('aHR0cDovLzExMC40Mi4xMTEuMjQxOjI4NDMx'), 
       btn4: btoa('aHR0cDovLzExMC40Mi4xMTEuMjQxOjI4NDMwL2J0cGFuZWw='),
-      btn5: btoa('aHR0cDovLzExMC40Mi4xMTEuMjQxOjI4NDI2Lw==')
+      btn5: btoa('aHR0cDovLzExMC40Mi4xMTEuMjQxOjI4NDI2Lw=='),
+      btn6: btoa('aHR0cDovLzExMC40Mi4xMTEuMjQxOjI4NDI3')
     };
 
     function openDecodedUrl(id) {
       const doubleEncoded = links[id];
       if (!doubleEncoded) return;
-      // 先解第一层Base64，得到一级Base64字符串
       const singleEncoded = atob(doubleEncoded);
-      // 再解一级Base64，得到真实URL
       const url = atob(singleEncoded);
       window.open(url, '_blank');
     }
@@ -137,9 +137,9 @@
       openDecodedUrl('btn1');
     });
 
-    ['btn2','btn3','btn4','btn5'].forEach(id => {
+    ['btn2','btn3','btn4','btn5','btn6'].forEach(id => {
       document.getElementById(id).addEventListener('click', () => {
-        const pwd = prompt('请输入密码访问该链接：');
+        const pwd = prompt('请输入8位密码访问该链接：');
         if(pwd === null) return;
         if(fakeVerifyPwd(pwd)) {
           openDecodedUrl(id);
