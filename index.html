@@ -134,7 +134,7 @@
 
     ['btn2','btn3','btn4'].forEach(id => {
       document.getElementById(id).addEventListener('click', () => {
-        const pwd = prompt('请输入密码访问该链接：');
+        const pwd = prompt('请输入8位密码访问该链接：');
         if(pwd === null) return;
         if(fakeVerifyPwd(pwd)) {
           openDecodedUrl(id);
