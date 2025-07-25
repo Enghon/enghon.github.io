@@ -80,18 +80,21 @@
 
 
   <script>
+    // 这里是原来单层Base64编码的字符串，再外面套了一层Base64编码
     const links = {
       btn1: btoa('eml5dWFuLmh0bWw='), 
       btn2: btoa('aHR0cDovLzExMC40Mi4xMTEuMjQxOjI4NDMyLw=='), 
       btn3: btoa('aHR0cDovLzExMC40Mi4xMTEuMjQxOjI4NDMx'), 
-      btn4: btoa('aHR0cDovLzExMC40Mi4xMTEuMjQxOjI4NDMwL2J0cGFuZWw=')
-      btn4: btoa('aHR0cDovLzExMC40Mi4xMTEuMjQxOjI4NDI2Lw==')
+      btn4: btoa('aHR0cDovLzExMC40Mi4xMTEuMjQxOjI4NDMwL2J0cGFuZWw='),
+      btn5: btoa('aHR0cDovLzExMC40Mi4xMTEuMjQxOjI4NDI2Lw==')
     };
 
     function openDecodedUrl(id) {
       const doubleEncoded = links[id];
       if (!doubleEncoded) return;
+      // 先解第一层Base64，得到一级Base64字符串
       const singleEncoded = atob(doubleEncoded);
+      // 再解一级Base64，得到真实URL
       const url = atob(singleEncoded);
       window.open(url, '_blank');
     }
@@ -136,7 +139,7 @@
 
     ['btn2','btn3','btn4','btn5'].forEach(id => {
       document.getElementById(id).addEventListener('click', () => {
-        const pwd = prompt('请输入8位密码访问该链接：');
+        const pwd = prompt('请输入密码访问该链接：');
         if(pwd === null) return;
         if(fakeVerifyPwd(pwd)) {
           openDecodedUrl(id);
