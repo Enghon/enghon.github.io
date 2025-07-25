@@ -75,6 +75,7 @@
     <a id="btn2" class="button" href="javascript:void(0);" target="_blank">🖥️ 飞牛nas</a>
     <a id="btn3" class="button" href="javascript:void(0);" target="_blank">📷 证件照</a>
     <a id="btn4" class="button" href="javascript:void(0);" target="_blank">🛠️ 宝塔</a>
+    <a id="btn5" class="button" href="javascript:void(0);" target="_blank">博客</a>
 
 
 
@@ -84,6 +85,7 @@
       btn2: btoa('aHR0cDovLzExMC40Mi4xMTEuMjQxOjI4NDMyLw=='), 
       btn3: btoa('aHR0cDovLzExMC40Mi4xMTEuMjQxOjI4NDMx'), 
       btn4: btoa('aHR0cDovLzExMC40Mi4xMTEuMjQxOjI4NDMwL2J0cGFuZWw=')
+      btn4: btoa('aHR0cDovLzExMC40Mi4xMTEuMjQxOjI4NDI2Lw==')
     };
 
     function openDecodedUrl(id) {
@@ -132,7 +134,7 @@
       openDecodedUrl('btn1');
     });
 
-    ['btn2','btn3','btn4'].forEach(id => {
+    ['btn2','btn3','btn4','btn5'].forEach(id => {
       document.getElementById(id).addEventListener('click', () => {
         const pwd = prompt('请输入8位密码访问该链接：');
         if(pwd === null) return;
