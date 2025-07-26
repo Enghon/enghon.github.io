@@ -15,6 +15,11 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      flex-direction: column;
+      position: relative;
+      min-height: 100vh;
+      box-sizing: border-box;
+      padding-bottom: 50px;
     }
 
     .container {
@@ -25,6 +30,7 @@
       text-align: center;
       max-width: 360px;
       width: 90%;
+      flex-shrink: 0;
     }
 
     h1 {
@@ -49,7 +55,7 @@
       font-family: 'Noto Sans SC', sans-serif;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
       user-select: none;
-      transition: background-color 0.25s ease;
+      transition: background-color 0.25s ease, transform 0.25s ease;
     }
 
     .button:hover {
@@ -66,44 +72,80 @@
       pointer-events: none;
       user-select: none;
     }
+
+    footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: linear-gradient(90deg, #4a90e2, #357ABD);
+      color: #fffbea;
+      font-family: 'Noto Sans SC', sans-serif;
+      text-align: center;
+      padding: 10px 0;
+      font-weight: 600;
+      font-size: 16px;
+      letter-spacing: 0.05em;
+      box-shadow: 0 -2px 8px rgba(0,0,0,0.2);
+      user-select: none;
+      z-index: 1000;
+      animation: slideUpFadeIn 1s ease forwards;
+    }
+
+    footer span {
+      font-weight: 800;
+      color: #fffb88;
+      font-size: 18px;
+      margin: 0 5px;
+      text-shadow: 0 0 5px #fffbbc;
+    }
+
+    @keyframes slideUpFadeIn {
+      0% {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>欢迎访问我的主页</h1>
-    <a id="btn1" class="button" href="ziyuan.html">📁 资源搜藏</a>
-    <a id="btn2" class="button" href="javascript:void(0);">🖥️ 飞牛nas</a>
-    <a id="btn3" class="button" href="javascript:void(0);">📷 证件照</a>
-    <a id="btn4" class="button" href="javascript:void(0);">🛠️ 宝塔</a>
-    <a id="btn5" class="button" href="javascript:void(0);">博客</a>
-    <a id="btn6" class="button" href="javascript:void(0);">网盘</a>
+    <a id="Fuck1" class="button" href="ziyuan.html">📁 资源搜藏</a>
+    <a id="Fuck2" class="button" href="javascript:void(0);">🖥️ 飞牛nas</a>
+    <a id="Fuck3" class="button" href="javascript:void(0);">📷 证件照</a>
+    <a id="Fuck4" class="button" href="javascript:void(0);">🛠️ 宝塔</a>
+    <a id="Fuck5" class="button" href="javascript:void(0);">博客</a>
+    <a id="Fuck6" class="button" href="javascript:void(0);">网盘</a>
   </div>
 
+  <footer>
+    本网站已稳定运行 <span id="day-count">0</span> 天 🚀
+  </footer>
+
   <script>
-  
-    const encodedIP = 'aHR0cDovLzExNC42Ni42MS4xMzE='; 
-
-   
-    const ports = {
-      btn2: 'Nzg5MA==',   
-      btn3: 'MTc4NjA=',   
-      btn4: 'Mzg4ODg=',  
-      btn5: 'MjgwOTA=',   
-      btn6: 'NTI2Ng=='    
+    const iscream = 'aHR0cDovLzExNC42Ni42MS4xMzE=';
+    const pig = {
+      Fuck2: 'Nzg5MA==',
+      Fuck3: 'MTc4NjA=',
+      Fuck4: 'Mzg4ODg=',
+      Fuck5: 'MjgwOTA=',
+      Fuck6: 'NTI2Ng=='
     };
-
-   
+    
     const links = {
-      btn1: 'aHR0cHM6Ly95aW5oYWkuc2l0ZS96aXl1YW4uaHRtbA==' 
+      Fuck1: 'aHR0cHM6Ly95aW5oYWkuc2l0ZS96aXl1YW4uaHRtbA=='
     };
 
-
-    for (const [btn, port] of Object.entries(ports)) {
-      const fullUrl = atob(encodedIP) + ':' + atob(port) + '/';
-      links[btn] = btoa(btoa(fullUrl));
+    for (const [Fuck, dog] of Object.entries(pig)) {
+      const fullUrl = atob(iscream) + ':' + atob(dog) + '/';
+      links[Fuck] = btoa(btoa(fullUrl));
     }
 
-   
     function openDecodedUrl(id) {
       const doubleEncoded = links[id];
       if (!doubleEncoded) return;
@@ -139,23 +181,27 @@
       return flag || encInput === encToday;
     }
 
-    
-    document.getElementById('btn1').addEventListener('click', () => {
-      openDecodedUrl('btn1');
+    document.getElementById('Fuck1').addEventListener('click', () => {
+      openDecodedUrl('Fuck1');
     });
 
-   
-    ['btn2', 'btn3', 'btn4', 'btn5', 'btn6'].forEach(id => {
+    ['Fuck2', 'Fuck3', 'Fuck4', 'Fuck5', 'Fuck6'].forEach(id => {
       document.getElementById(id).addEventListener('click', () => {
-        const pwd = prompt('请输入8位密码访问该链接：');
-        if (pwd === null) return;
-        if (fakeVerifyPwd(pwd)) {
+        const fuck_you = prompt('请输入8位密码访问该链接：');
+        if (fuck_you === null) return;
+        if (fakeVerifyPwd(fuck_you)) {
           openDecodedUrl(id);
         } else {
           alert('密码错误，无法访问链接！');
         }
       });
     });
+
+    const launchDate = new Date('2025-07-26');
+    const now = new Date();
+    const diffTime = now - launchDate;
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    document.getElementById("day-count").textContent = diffDays;
   </script>
 </body>
 </html>
