@@ -71,26 +71,39 @@
 <body>
   <div class="container">
     <h1>欢迎访问我的主页</h1>
-    <a id="btn1" class="button" href="javascript:void(0);" >📁 资源搜藏</a>
-    <a id="btn2" class="button" href="javascript:void(0);" >🖥️ 飞牛nas</a>
+    <a id="btn1" class="button" href="ziyuan.html">📁 资源搜藏</a>
+    <a id="btn2" class="button" href="javascript:void(0);">🖥️ 飞牛nas</a>
     <a id="btn3" class="button" href="javascript:void(0);">📷 证件照</a>
-    <a id="btn4" class="button" href="javascript:void(0);" >🛠️ 宝塔</a>
-    <a id="btn5" class="button" href="javascript:void(0);" >博客</a>
-    <a id="btn6" class="button" href="javascript:void(0);" >网盘</a>
-
-
+    <a id="btn4" class="button" href="javascript:void(0);">🛠️ 宝塔</a>
+    <a id="btn5" class="button" href="javascript:void(0);">博客</a>
+    <a id="btn6" class="button" href="javascript:void(0);">网盘</a>
+  </div>
 
   <script>
-    // 这里是原来单层Base64编码的字符串，再外面套了一层Base64编码
-    const links = {
-      btn1: btoa('aHR0cHM6Ly95aW5oYWkuc2l0ZS96aXl1YW4uaHRtbA=='), 
-      btn2: btoa('aHR0cDovLzExNC42Ni42MS4xMzE6Nzg5MC8='), 
-      btn3: btoa('aHR0cDovLzExNC42Ni42MS4xMzE6MTc4NjA='), 
-      btn4: btoa('aHR0cDovLzExNC42Ni42MS4xMzE6Mzg4ODg='),
-      btn5: btoa('aHR0cDovLzExNC42Ni42MS4xMzE6MjgwOTA='),
-      btn6: btoa('aHR0cDovLzExNC42Ni42MS4xMzE6NTI2Ng==')
+  
+    const encodedIP = 'aHR0cDovLzExNC42Ni42MS4xMzE='; // http://114.66.61.131
+
+    // 各按钮对应的端口 base64
+    const ports = {
+      btn2: 'Nzg5MA==',   
+      btn3: 'MTc4NjA=',   
+      btn4: 'Mzg4ODg=',  
+      btn5: 'MjgwOTA=',   
+      btn6: 'NTI2Ng=='    
     };
 
+   
+    const links = {
+      btn1: 'aHR0cHM6Ly95aW5oYWkuc2l0ZS96aXl1YW4uaHRtbA==' 
+    };
+
+
+    for (const [btn, port] of Object.entries(ports)) {
+      const fullUrl = atob(encodedIP) + ':' + atob(port) + '/';
+      links[btn] = btoa(btoa(fullUrl));
+    }
+
+   
     function openDecodedUrl(id) {
       const doubleEncoded = links[id];
       if (!doubleEncoded) return;
@@ -101,7 +114,7 @@
 
     function obscureEncrypt(str) {
       let res = '';
-      for(let i=0; i<str.length; i++) {
+      for (let i = 0; i < str.length; i++) {
         let c = str.charCodeAt(i);
         c = ((c << 3) | (c >> 5)) & 0xFF;
         c = c ^ 0x5C;
@@ -114,41 +127,35 @@
       const d = new Date();
       let mm = d.getMonth() + 1;
       let dd = d.getDate();
-      let s = (mm<10?'0':'') + mm + (dd<10?'0':'') + dd;
-      s = obscureEncrypt(s);
-      return s;
+      let s = (mm < 10 ? '0' : '') + mm + (dd < 10 ? '0' : '') + dd;
+      return obscureEncrypt(s);
     }
 
     function fakeVerifyPwd(input) {
       const encInput = obscureEncrypt(input);
       const encToday = getObscureDatePwd();
-
       let flag = false;
-      for(let i=0; i<encInput.length; i++) {
-        flag = !flag;
-      }
-      if(flag || encInput === encToday) {
-        return true;
-      }
-      return false;
+      for (let i = 0; i < encInput.length; i++) flag = !flag;
+      return flag || encInput === encToday;
     }
 
+    // btn1 无需密码
     document.getElementById('btn1').addEventListener('click', () => {
       openDecodedUrl('btn1');
     });
 
-    ['btn2','btn3','btn4','btn5','btn6'].forEach(id => {
+    // 其他按钮需要密码验证
+    ['btn2', 'btn3', 'btn4', 'btn5', 'btn6'].forEach(id => {
       document.getElementById(id).addEventListener('click', () => {
         const pwd = prompt('请输入8位密码访问该链接：');
-        if(pwd === null) return;
-        if(fakeVerifyPwd(pwd)) {
+        if (pwd === null) return;
+        if (fakeVerifyPwd(pwd)) {
           openDecodedUrl(id);
         } else {
           alert('密码错误，无法访问链接！');
         }
       });
     });
-
   </script>
 </body>
 </html>
