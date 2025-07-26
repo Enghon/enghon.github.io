@@ -6,6 +6,7 @@
   <title>我的主页</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC&family=Noto+Sans+SC&display=swap" rel="stylesheet">
   <style>
+
     body {
       margin: 0;
       padding: 0;
@@ -21,7 +22,6 @@
       box-sizing: border-box;
       padding-bottom: 50px;
     }
-
     .container {
       background: rgba(255, 255, 255, 0.95);
       padding: 40px 60px;
@@ -32,13 +32,11 @@
       width: 90%;
       flex-shrink: 0;
     }
-
     h1 {
       margin-bottom: 40px;
       font-size: 2.8em;
       color: #333;
     }
-
     .button {
       display: block;
       width: 220px;
@@ -57,22 +55,11 @@
       user-select: none;
       transition: background-color 0.25s ease, transform 0.25s ease;
     }
-
     .button:hover {
       background-color: #357ABD;
       transform: translateY(-2px) scale(1.03);
       box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
     }
-
-    .fake-button {
-      background-color: #999 !important;
-      cursor: not-allowed !important;
-      box-shadow: none !important;
-      color: #ddd !important;
-      pointer-events: none;
-      user-select: none;
-    }
-
     footer {
       position: fixed;
       bottom: 0;
@@ -91,7 +78,6 @@
       z-index: 1000;
       animation: slideUpFadeIn 1s ease forwards;
     }
-
     footer span {
       font-weight: 800;
       color: #fffb88;
@@ -99,7 +85,6 @@
       margin: 0 5px;
       text-shadow: 0 0 5px #fffbbc;
     }
-
     @keyframes slideUpFadeIn {
       0% {
         opacity: 0;
@@ -127,28 +112,26 @@
     本网站已稳定运行 <span id="day-count">0</span> 天 🚀
   </footer>
 
+
+  <script src="js.js"></script>
+
   <script>
-    const iscream = 'aHR0cDovLzExNC42Ni42MS4xMzE=';
-    const pig = {
-      Fuck2: 'Nzg5MA==',
-      Fuck3: 'MTc4NjA=',
-      Fuck4: 'Mzg4ODg=',
-      Fuck5: 'MjgwOTA=',
-      Fuck6: 'NTI2Ng=='
-    };
-    
+
     const links = {
-      Fuck1: 'aHR0cHM6Ly95aW5oYWkuc2l0ZS96aXl1YW4uaHRtbA=='
+      Fuck1: 'fuck you tomi'
     };
 
-    for (const [Fuck, dog] of Object.entries(pig)) {
-      const fullUrl = atob(iscream) + ':' + atob(dog) + '/';
-      links[Fuck] = btoa(btoa(fullUrl));
+    for (const [id, portBase64] of Object.entries(pig)) {
+      const fullUrl = atob(iscream) + ':' + atob(portBase64) + '/';
+      links[id] = btoa(btoa(fullUrl));
     }
 
     function openDecodedUrl(id) {
       const doubleEncoded = links[id];
-      if (!doubleEncoded) return;
+      if (!doubleEncoded) {
+        alert('链接不存在！');
+        return;
+      }
       const singleEncoded = atob(doubleEncoded);
       const url = atob(singleEncoded);
       window.open(url, '_blank');
@@ -165,15 +148,9 @@
       return res.split('').reverse().join('');
     }
 
-    function getObscureDatePwd() {
-      const d = new Date();
-      let mm = d.getMonth() + 1;
-      let dd = d.getDate();
-      let s = (mm < 10 ? '0' : '') + mm + (dd < 10 ? '0' : '') + dd;
-      return obscureEncrypt(s);
-    }
-
+   
     function fakeVerifyPwd(input) {
+      if (!input) return false;
       const encInput = obscureEncrypt(input);
       const encToday = getObscureDatePwd();
       let flag = false;
@@ -187,9 +164,9 @@
 
     ['Fuck2', 'Fuck3', 'Fuck4', 'Fuck5', 'Fuck6'].forEach(id => {
       document.getElementById(id).addEventListener('click', () => {
-        const fuck_you = prompt('请输入8位密码访问该链接：');
-        if (fuck_you === null) return;
-        if (fakeVerifyPwd(fuck_you)) {
+        const pwd = prompt('请输入8位密码访问该链接：');
+        if (pwd === null) return;
+        if (fakeVerifyPwd(pwd)) {
           openDecodedUrl(id);
         } else {
           alert('密码错误，无法访问链接！');
@@ -197,10 +174,10 @@
       });
     });
 
+ 
     const launchDate = new Date('2025-07-26');
     const now = new Date();
-    const diffTime = now - launchDate;
-    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    const diffDays = Math.floor((now - launchDate) / (1000 * 60 * 60 * 24));
     document.getElementById("day-count").textContent = diffDays;
   </script>
 </body>
