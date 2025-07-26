@@ -83,7 +83,7 @@
   
     const encodedIP = 'aHR0cDovLzExNC42Ni42MS4xMzE='; 
 
-    // 各按钮对应的端口 base64
+   
     const ports = {
       btn2: 'Nzg5MA==',   
       btn3: 'MTc4NjA=',   
@@ -139,12 +139,12 @@
       return flag || encInput === encToday;
     }
 
-    // btn1 无需密码
+    
     document.getElementById('btn1').addEventListener('click', () => {
       openDecodedUrl('btn1');
     });
 
-    // 其他按钮需要密码验证
+   
     ['btn2', 'btn3', 'btn4', 'btn5', 'btn6'].forEach(id => {
       document.getElementById(id).addEventListener('click', () => {
         const pwd = prompt('请输入8位密码访问该链接：');
