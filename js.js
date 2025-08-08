@@ -7,7 +7,7 @@ const pig = {
   Fuck4: 'Mzg4ODg=',
   Fuck5: 'MjgwOTA=',
   Fuck6: 'NTI2Ng==',
-  Fuck7: 'NjY2Mg=='
+  Fuck7: 'NjY2Mi90cmVlL3dvcms='
 };
 
     function getObscureDatePwd() {
