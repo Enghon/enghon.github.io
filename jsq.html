@@ -76,7 +76,7 @@
         border-radius: 5px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     }
-    /* Styles for calculator section */
+  
     .calculator {
         width: 300px;
     }
@@ -109,7 +109,7 @@
     .calculator p {
         font-size: 18px;
     }
-    /* 横排显示打点记录 */
+    
     #recordedList {
         display: flex;
         list-style-type: none;
@@ -142,14 +142,14 @@
     <button onclick="startCountdown()" style="background-color: #b9ff7f;color: #232323">开始倒计时</button>
 
 
-    <button onclick="resetCountdown()" style="background-color: #ff7f92;color: #232323">清零倒计时</button> <!-- 添加清零倒计时按钮 -->
-    <button onclick="startElapsedTime()" style="background-color: #b9ff7f;color: #232323">开始正计时</button> <!-- 单独开始正计时 -->
-    <button onclick="resetElapsedTime()" style="background-color: #ff7f92;color: #232323">清零正计时</button> <!-- 单独清零正计时 -->
+    <button onclick="resetCountdown()" style="background-color: #ff7f92;color: #232323">清零倒计时</button> 
+    <button onclick="startElapsedTime()" style="background-color: #b9ff7f;color: #232323">开始正计时</button> 
+    <button onclick="resetElapsedTime()" style="background-color: #ff7f92;color: #232323">清零正计时</button> 
 
     <button onclick="recordTime()">记录时间</button>
     <button onclick="clearRecordedTimes()" style="background-color: #ff7f92;color: #232323">清除记录时间</button>
 
-    <button onclick="toggleFontSize()" style="background-color: #009caa;color: #232323">切换显示</button> <!-- 添加切换显示按钮 -->
+    <button onclick="toggleFontSize()" style="background-color: #009caa;color: #232323">切换显示</button> 
 
     <button onclick="openCalculator()">计算器</button>
     <button onclick="showZoomControl()">缩放网页</button>
@@ -194,12 +194,12 @@ function adjustZoom() {
 }
 
 let countdownInterval;
-let elapsedTimeInterval; // 添加一个定时器用于正计时
+let elapsedTimeInterval; 
 let isPaused = false;
 let recordedTimes = [];
-let isCountdownDisplayed = true; // 添加一个变量来记录当前显示的是倒计时还是正计时
-let pauseStartTime = 0; // 记录暂停开始时间
-let pauseDuration = 0; // 记录暂停的持续时间
+let isCountdownDisplayed = true; 
+let pauseStartTime = 0; 
+let pauseDuration = 0; 
 
 function startCountdown() {
     clearInterval(countdownInterval);
@@ -286,15 +286,15 @@ function toggleFullscreen() {
 
 function resetCountdown() {
     clearInterval(countdownInterval);
-    // clearInterval(elapsedTimeInterval); // 清除正计时定时器
+    
     document.getElementById("countdown").innerText = "00:00";
-    // document.getElementById("elapsedTime").innerText = "00:00"; // 重置正计时显示
-    pauseDuration = 0; // 重置暂停持续时间
+    
+    pauseDuration = 0; 
 }
 
 function resetElapsedTime() {
     clearInterval(elapsedTimeInterval);
-    document.getElementById("elapsedTime").innerText = "00:00"; // 重置正计时显示
+    document.getElementById("elapsedTime").innerText = "00:00"; 
 }
 
 let recordedCount = 0;
@@ -312,7 +312,7 @@ function recordTime() {
 
 function startRecordedTime() {
     recordTime();
-    setInterval(recordTime, 1000); // 开始每秒记录时间
+    setInterval(recordTime, 1000); 
 }
 
 function refreshPage() {
