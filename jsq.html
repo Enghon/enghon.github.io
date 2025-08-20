@@ -23,7 +23,7 @@
         letter-spacing: 2px;
     }
     #countdown {
-        font-size: 40vh; /* 将字体大小设置为屏幕高度的 80% */
+        font-size: 40vh; 
         font-weight: bold;
     }
     #elapsedTime {
@@ -55,7 +55,7 @@
     .red {
         color: #ff003b;
     }
-    /* 添加新的样式来隐藏弹窗 */
+ 
     .popup {
         display: none;
         position: fixed;
@@ -126,9 +126,9 @@
 
 <div id="countdown" style="font-size: 650px">00:00</div>
 
-<div id="elapsedTime" style="font-size: 80px; ">00:00</div> <!-- 添加一个隐藏的正计时显示 -->
+<div id="elapsedTime" style="font-size: 80px; ">00:00</div>
 
-<!-- 添加弹窗 -->
+
 <div id="popup" class="popup">
     <div class="popup-content">
         <h1 style="font-size: 260px; color: #ff003b; margin-bottom: 50px;">时间到啦</h1>
@@ -137,7 +137,7 @@
 </div>
 
 <div style="margin-top: 10px!important;">
-    <input type="number" id="minutes" min="0" value="22" placeholder="分钟">  <!-- 设置默认时间-->
+    <input type="number" id="minutes" min="0" value="7" placeholder="分钟">  <!-- 设置默认时间-->
 
     <button onclick="startCountdown()" style="background-color: #b9ff7f;color: #232323">开始倒计时</button>
 
