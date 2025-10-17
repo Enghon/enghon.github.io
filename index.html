@@ -1,187 +1,110 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>殷海主页</title>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC&family=Noto+Sans+SC&display=swap" rel="stylesheet">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>校长信箱</title>
+  <meta name="description" content="点击进入校长信箱，向校领导留言与反馈。" />
   <style>
+    :root{--bg:#f4f7fb;--card:#ffffff;--accent:#1f78d1;--muted:#6b7280}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial;background:linear-gradient(180deg,var(--bg),#eef3fb);color:#0f1724;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+    .container{width:100%;max-width:960px}
+    header{display:flex;align-items:center;gap:16px;margin-bottom:20px}
+    .logo{width:64px;height:64px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#4aa3ff);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:28px;box-shadow:0 6px 18px rgba(31,120,209,0.18)}
+    h1{font-size:24px;margin:0}
+    p.lead{margin:6px 0 0;color:var(--muted)}
 
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Noto Serif SC', serif;
-      background: linear-gradient(145deg, #c6ffdd, #fbd786, #f7797d);
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      position: relative;
-      min-height: 100vh;
-      box-sizing: border-box;
-      padding-bottom: 50px;
-    }
-    .container {
-      background: rgba(255, 255, 255, 0.95);
-      padding: 40px 60px;
-      border-radius: 20px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-      text-align: center;
-      max-width: 360px;
-      width: 90%;
-      flex-shrink: 0;
-    }
-    h1 {
-      margin-bottom: 40px;
-      font-size: 2.8em;
-      color: #333;
-    }
-    .button {
-      display: block;
-      width: 220px;
-      margin: 16px auto;
-      padding: 15px 0;
-      background-color: #4a90e2;
-      color: white;
-      border: none;
-      border-radius: 30px;
-      font-size: 1.1em;
-      text-decoration: none;
-      text-align: center;
-      cursor: pointer;
-      font-family: 'Noto Sans SC', sans-serif;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-      user-select: none;
-      transition: background-color 0.25s ease, transform 0.25s ease;
-    }
-    .button:hover {
-      background-color: #357ABD;
-      transform: translateY(-2px) scale(1.03);
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
-    }
-    footer {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      background: linear-gradient(90deg, #4a90e2, #357ABD);
-      color: #fffbea;
-      font-family: 'Noto Sans SC', sans-serif;
-      text-align: center;
-      padding: 10px 0;
-      font-weight: 600;
-      font-size: 16px;
-      letter-spacing: 0.05em;
-      box-shadow: 0 -2px 8px rgba(0,0,0,0.2);
-      user-select: none;
-      z-index: 1000;
-      animation: slideUpFadeIn 1s ease forwards;
-    }
-    footer span {
-      font-weight: 800;
-      color: #fffb88;
-      font-size: 18px;
-      margin: 0 5px;
-      text-shadow: 0 0 5px #fffbbc;
-    }
-    @keyframes slideUpFadeIn {
-      0% {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
+    .card{background:var(--card);border-radius:14px;padding:28px;box-shadow:0 8px 30px rgba(15,23,36,0.06);display:flex;align-items:center;gap:24px}
+    .mail-visual{flex:0 0 160px;display:flex;flex-direction:column;align-items:center;gap:12px}
+    .mail-icon{width:120px;height:80px;border-radius:10px;background:linear-gradient(180deg,#fff,#f1f7ff);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(31,120,209,0.08);position:relative}
+    .mail-icon:after{content:'';position:absolute;left:12px;right:12px;top:18px;height:2px;background:linear-gradient(90deg,transparent,rgba(31,120,209,0.06),transparent)}
+    .seal{width:46px;height:46px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;box-shadow:0 6px 14px rgba(31,120,209,0.2)}
+
+    .content{flex:1}
+    .content h2{margin:0 0 8px;font-size:20px}
+    .content p{margin:0 0 14px;color:var(--muted)}
+    .actions{display:flex;gap:12px;align-items:center}
+    .btn{appearance:none;border:0;cursor:pointer;padding:12px 18px;border-radius:10px;font-weight:600}
+    .btn-primary{background:var(--accent);color:#fff;box-shadow:0 8px 20px rgba(31,120,209,0.14)}
+    .btn-secondary{background:transparent;color:var(--accent);border:1px solid rgba(31,120,209,0.12)}
+
+    .tips{margin-top:14px;color:var(--muted);font-size:13px}
+
+    footer{margin-top:18px;text-align:right;color:var(--muted);font-size:13px}
+
+    @media (max-width:680px){.card{flex-direction:column;align-items:stretch}.mail-visual{flex-direction:row;justify-content:space-between}.mail-icon{width:100px;height:66px}.content h2{font-size:18px}}
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>殷海的主页</h1>
-    <a id="Fuck1" class="button" href="ziyuan.html">资源搜藏</a>
-    <a id="Fuck2" class="button" href="javascript:void(0);">飞牛nas</a>
-    <a id="Fuck3" class="button" href="javascript:void(0);">证件照</a>
-    <a id="Fuck4" class="button" href="javascript:void(0);">宝塔</a>
-    <a id="Fuck5" class="button" href="javascript:void(0);">博客</a>
-    <a id="Fuck6" class="button" href="javascript:void(0);">网盘</a>
-    <a id="Fuck7" class="button" href="javascript:void(0);">jupyter_nootbook</a>
-    <a id="Fuck0" class="button" href="http://114.66.61.130:3456/">流量表</a>
-    
+    <header>
+      <div class="logo">校</div>
+      <div>
+        <h1>校长信箱</h1>
+        <p class="lead">欢迎向校领导反映意见、建议与心声 —— 我们会认真阅读每一封来信。</p>
+      </div>
+    </header>
+
+    <main class="card" role="main">
+      <div class="mail-visual" aria-hidden="true">
+        <div class="mail-icon">
+          <svg width="64" height="46" viewBox="0 0 64 46" fill="none" xmlns="http://www.w3.org/2000/svg" style="z-index:2">
+            <rect x="1" y="3" width="62" height="40" rx="6" fill="#ffffff" stroke="#dbeefb"/>
+            <path d="M4 8l28 18L60 8" stroke="#9ecfff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="seal">信</div>
+      </div>
+
+      <div class="content">
+        <h2>想对学校说点什么？</h2>
+        <p>点击下方“进入信箱”按钮即可前往提交您的意见与建议。我们承诺保护您的隐私并认真处理每一条反馈。</p>
+
+        <div class="actions">
+          <!-- 按钮会在当前页跳转到指定地址，如需在新窗口打开请改为 target="_blank" -->
+          <button id="openInbox" class="btn btn-primary" aria-label="进入校长信箱">进入信箱</button>
+          <a class="btn btn-secondary" href="#guidelines" role="button">查看使用须知</a>
+        </div>
+
+        <div class="tips">温馨提示：请勿在信箱中发布违法、辱骂或包含个人隐私的敏感信息。</div>
+
+        <div id="guidelines" style="margin-top:12px;display:none">
+          <h4 style="margin:8px 0 6px">使用须知</h4>
+          <ul style="margin:0 0 0 18px;color:var(--muted)">
+            <li>真实反映问题，便于学校及时处理。</li>
+            <li>匿名投稿也将被受理，但如需反馈建议处理结果，请留下联系方式。</li>
+            <li>公示与回复将遵循学校相关工作流程。</li>
+          </ul>
+        </div>
+      </div>
+    </main>
+
+    <footer>校方回应通常在7个工作日内处理。 &middot; 版本 1.0</footer>
   </div>
 
-  <footer>
-    本网站已稳定运行 <span id="day-count">0</span> 天 
-  </footer>
-
-
-  <script src="js.js"></script>
-
   <script>
+    (function(){
+      const inboxUrl = 'http://114.66.61.130:3009/';
+      document.getElementById('openInbox').addEventListener('click', function(){
+        // 在当前页跳转到信箱
+        window.location.href = inboxUrl;
+      });
 
-    const links = {
-      Fuck1: 'fuck you tomi'
-    };
-
-    for (const [id, portBase64] of Object.entries(pig)) {
-      const fullUrl = atob(iscream) + ':' + atob(portBase64) + '/';
-      links[id] = btoa(btoa(fullUrl));
-    }
-
-    function openDecodedUrl(id) {
-      const doubleEncoded = links[id];
-      if (!doubleEncoded) {
-        alert('链接不存在！');
-        return;
-      }
-      const singleEncoded = atob(doubleEncoded);
-      const url = atob(singleEncoded);
-      window.open(url, '_blank');
-    }
-
-    function obscureEncrypt(str) {
-      let res = '';
-      for (let i = 0; i < str.length; i++) {
-        let c = str.charCodeAt(i);
-        c = ((c << 3) | (c >> 5)) & 0xFF;
-        c = c ^ 0x5C;
-        res += String.fromCharCode(c);
-      }
-      return res.split('').reverse().join('');
-    }
-
-   
-    function fakeVerifyPwd(input) {
-      if (!input) return false;
-      const encInput = obscureEncrypt(input);
-      const encToday = getObscureDatePwd();
-      let flag = false;
-      for (let i = 0; i < encInput.length; i++) flag = !flag;
-      return flag || encInput === encToday;
-    }
-
-    document.getElementById('Fuck1').addEventListener('click', () => {
-      openDecodedUrl('Fuck1');
-    });
-
-    ['Fuck2', 'Fuck3', 'Fuck4', 'Fuck5', 'Fuck6', 'Fuck7'].forEach(id => {
-      document.getElementById(id).addEventListener('click', () => {
-        const pwd = prompt('请输入8位密码访问该链接：');
-        if (pwd === null) return;
-        if (fakeVerifyPwd(pwd)) {
-          openDecodedUrl(id);
-        } else {
-          alert('密码错误，无法访问链接！');
+      // 可选：按键快速访问（I 键）
+      document.addEventListener('keydown', function(e){
+        if(e.key === 'i' || e.key === 'I'){
+          window.location.href = inboxUrl;
         }
       });
-    });
 
- 
-    const launchDate = new Date('2025-07-26');
-    const now = new Date();
-    const diffDays = Math.floor((now - launchDate) / (1000 * 60 * 60 * 24));
-    document.getElementById("day-count").textContent = diffDays;
+      // 展示使用须知切换
+      document.querySelector('a[role="button"]').addEventListener('click', function(e){
+        e.preventDefault();
+        const g = document.getElementById('guidelines');
+        g.style.display = (g.style.display === 'none') ? 'block' : 'none';
+      });
+    })();
   </script>
 </body>
 </html>
