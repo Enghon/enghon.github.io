@@ -3,108 +3,79 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>校长信箱</title>
-  <meta name="description" content="点击进入校长信箱，向校领导留言与反馈。" />
+  <title>最美证件照 · 欢迎使用</title>
   <style>
-    :root{--bg:#f4f7fb;--card:#ffffff;--accent:#1f78d1;--muted:#6b7280}
-    *{box-sizing:border-box}
-    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial;background:linear-gradient(180deg,var(--bg),#eef3fb);color:#0f1724;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
-    .container{width:100%;max-width:960px}
-    header{display:flex;align-items:center;gap:16px;margin-bottom:20px}
-    .logo{width:64px;height:64px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#4aa3ff);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:28px;box-shadow:0 6px 18px rgba(31,120,209,0.18)}
-    h1{font-size:24px;margin:0}
-    p.lead{margin:6px 0 0;color:var(--muted)}
-
-    .card{background:var(--card);border-radius:14px;padding:28px;box-shadow:0 8px 30px rgba(15,23,36,0.06);display:flex;align-items:center;gap:24px}
-    .mail-visual{flex:0 0 160px;display:flex;flex-direction:column;align-items:center;gap:12px}
-    .mail-icon{width:120px;height:80px;border-radius:10px;background:linear-gradient(180deg,#fff,#f1f7ff);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(31,120,209,0.08);position:relative}
-    .mail-icon:after{content:'';position:absolute;left:12px;right:12px;top:18px;height:2px;background:linear-gradient(90deg,transparent,rgba(31,120,209,0.06),transparent)}
-    .seal{width:46px;height:46px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;box-shadow:0 6px 14px rgba(31,120,209,0.2)}
-
-    .content{flex:1}
-    .content h2{margin:0 0 8px;font-size:20px}
-    .content p{margin:0 0 14px;color:var(--muted)}
-    .actions{display:flex;gap:12px;align-items:center}
-    .btn{appearance:none;border:0;cursor:pointer;padding:12px 18px;border-radius:10px;font-weight:600}
-    .btn-primary{background:var(--accent);color:#fff;box-shadow:0 8px 20px rgba(31,120,209,0.14)}
-    .btn-secondary{background:transparent;color:var(--accent);border:1px solid rgba(31,120,209,0.12)}
-
-    .tips{margin-top:14px;color:var(--muted);font-size:13px}
-
-    footer{margin-top:18px;text-align:right;color:var(--muted);font-size:13px}
-
-    @media (max-width:680px){.card{flex-direction:column;align-items:stretch}.mail-visual{flex-direction:row;justify-content:space-between}.mail-icon{width:100px;height:66px}.content h2{font-size:18px}}
+    body {
+      margin: 0;
+      font-family: 'Microsoft YaHei', sans-serif;
+      background: linear-gradient(135deg, #f9fafc, #e3f2fd);
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+    }
+    h1 {
+      font-size: 40px;
+      color: #1976d2;
+      margin-bottom: 10px;
+    }
+    p {
+      font-size: 18px;
+      color: #555;
+      margin-bottom: 30px;
+    }
+    .btn {
+      display: inline-block;
+      background-color: #1976d2;
+      color: white;
+      padding: 14px 30px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-size: 18px;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+    .btn:hover {
+      background-color: #0d47a1;
+    }
+    footer {
+      position: absolute;
+      bottom: 20px;
+      width: 100%;
+      text-align: center;
+      font-size: 14px;
+      color: #666;
+    }
+    .friend-links {
+      margin-top: 10px;
+    }
+    .friend-links a {
+      color: #1976d2;
+      text-decoration: none;
+      margin: 0 8px;
+      transition: color 0.2s;
+    }
+    .friend-links a:hover {
+      color: #0d47a1;
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <div class="logo">校</div>
-      <div>
-        <h1>校长信箱</h1>
-        <p class="lead">欢迎向校领导反映意见、建议与心声 —— 我们会认真阅读每一封来信。</p>
-      </div>
-    </header>
+  <h1>欢迎使用 · 最美证件照</h1>
+  <p>一键生成最美证件照，让证件照也能上镜！</p>
+  <a href="http://114.66.61.130:17860" class="btn">开始制作</a>
 
-    <main class="card" role="main">
-      <div class="mail-visual" aria-hidden="true">
-        <div class="mail-icon">
-          <svg width="64" height="46" viewBox="0 0 64 46" fill="none" xmlns="http://www.w3.org/2000/svg" style="z-index:2">
-            <rect x="1" y="3" width="62" height="40" rx="6" fill="#ffffff" stroke="#dbeefb"/>
-            <path d="M4 8l28 18L60 8" stroke="#9ecfff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
-        <div class="seal">信</div>
-      </div>
-
-      <div class="content">
-        <h2>想对学校说点什么？</h2>
-        <p>点击下方“进入信箱”按钮即可前往提交您的意见与建议。我们承诺保护您的隐私并认真处理每一条反馈。</p>
-
-        <div class="actions">
-          <!-- 按钮会在当前页跳转到指定地址，如需在新窗口打开请改为 target="_blank" -->
-          <button id="openInbox" class="btn btn-primary" aria-label="进入校长信箱">进入信箱</button>
-          <a class="btn btn-secondary" href="#guidelines" role="button">查看使用须知</a>
-        </div>
-
-        <div class="tips">温馨提示：请勿在信箱中发布违法、辱骂或包含个人隐私的敏感信息。</div>
-
-        <div id="guidelines" style="margin-top:12px;display:none">
-          <h4 style="margin:8px 0 6px">使用须知</h4>
-          <ul style="margin:0 0 0 18px;color:var(--muted)">
-            <li>真实反映问题，便于学校及时处理。</li>
-            <li>匿名投稿也将被受理，但如需反馈建议处理结果，请留下联系方式。</li>
-            <li>公示与回复将遵循学校相关工作流程。</li>
-          </ul>
-        </div>
-      </div>
-    </main>
-
-    <footer>校方回应通常在7个工作日内处理。 &middot; 版本 1.0</footer>
-  </div>
-
-  <script>
-    (function(){
-      const inboxUrl = 'http://114.66.61.130:3009/';
-      document.getElementById('openInbox').addEventListener('click', function(){
-        // 在当前页跳转到信箱
-        window.location.href = inboxUrl;
-      });
-
-      // 可选：按键快速访问（I 键）
-      document.addEventListener('keydown', function(e){
-        if(e.key === 'i' || e.key === 'I'){
-          window.location.href = inboxUrl;
-        }
-      });
-
-      // 展示使用须知切换
-      document.querySelector('a[role="button"]').addEventListener('click', function(e){
-        e.preventDefault();
-        const g = document.getElementById('guidelines');
-        g.style.display = (g.style.display === 'none') ? 'block' : 'none';
-      });
-    })();
-  </script>
+  <footer>
+    <div>© 2025 最美证件照</div>
+    <div class="friend-links">
+      <a href="#">关于我们</a>
+      <a href="#">拍摄指南</a>
+      <a href="#">常见问题</a>
+      <a href="#">隐私政策</a>
+    </div>
+  </footer>
 </body>
 </html>
