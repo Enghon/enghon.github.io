@@ -4,9 +4,9 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: radial-gradient(circle at center, #0a0f24, #000000 80%);
-  font-family: Arial, sans-serif;
-  color: #00eaff;
+  background: radial-gradient(circle at center,#0a0f24,#000000 80%);
+  font-family: 'Arial', sans-serif;
+  color: #01eaff;
   overflow: hidden;
 }
 
