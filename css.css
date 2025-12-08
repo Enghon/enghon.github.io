@@ -1,13 +1,13 @@
 body {
-  margin: 0;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: radial-gradient(circle at center, #0a0f24, #000000 80%);
-  font-family: Arial, sans-serif;
-  color: #01eaff;
-  overflow: hidden;
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial,sans-serif;
+    color:#01eaff;
+    overflow:hidden;
+    background: radial-gradient(circle at center,#0a0f24,#000000 80%);
 }
 
 /* 动态光点背景 */
