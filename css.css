@@ -1,5 +1,12 @@
 body {
-
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial,sans-serif;
+  color: #00eaff;
+  overflow: hidden;
   background: radial-gradient(circle at center,#0a0f24,#000000 80%);
 }
 
