@@ -1,13 +1,1715 @@
-<html>
+<!DOCTYPE html>
+<html lang="zh-CN">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>紧凑标准答题卡</title>
+    <style>
+        /* 全局样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: "Microsoft YaHei", "微软雅黑", "SimSun", "宋体", Arial, sans-serif;
+            font-size: 10pt;
+            line-height: 1.5;
+            color: #2c3e50;
+            background-color: #f5f7fa;
+        }
+        
+        /* A4纸张样式 */
+        .a4-paper {
+            width: 210mm;
+            min-height: 297mm;
+            margin: 25px auto;
+            padding: 8mm 8mm 8mm 13mm;
+            position: relative;
+            background-color: #ffffff;
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.12);
+            border-radius: 5px;
+            border: 1px solid #e3f2fd;
+        }
+        
+        /* 打印样式优化 */
+        @media print {
+            /* 隐藏浏览器自动添加的页眉页脚 */
+            @page {
+                size: A4;
+                margin: 0;
+            }
+            
+            body {
+                background-color: #fff;
+                -webkit-print-color-adjust: exact;
+                margin: 0;
+                padding: 0;
+            }
+            
+            .a4-paper {
+                margin: 0;
+                padding: 8mm 8mm 8mm 13mm;
+                border: none;
+                box-shadow: none;
+                page-break-inside: auto;
+            }
+            
+            /* 为每个分页的答题卡添加完整边框 */
+            .answer-sheet {
+                position: relative;
+            }
+            
+            /* 使用::after伪元素在打印时为每个分页添加边框 */
+            .answer-sheet::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                border: 1.5px solid black;
+                z-index: -1;
+                pointer-events: none;
+            }
+            
+            .control-panel {
+                display: none !important;
+            }
+            
+            /* 打印时移除所有背景颜色，节省墨水 */
+            .questions-section,
+            .info-input,
+            .option-marker,
+            .id-marker {
+                background-color: white !important;
+                box-shadow: none !important;
+            }
+            
+            /* 确保所有边框和线条清晰可见 */
+            .answer-sheet,
+            .info-input,
+            .option-marker,
+            .id-marker,
+            .score-input {
+                border: 1px solid black !important;
+            }
+            
+            /* 优化选择标记的打印效果 */
+            .option-marker.selected {
+                background-color: black !important;
+                border-color: black !important;
+                box-shadow: none !important;
+            }
+            
+            /* 移除选择标记的勾选符号，只保留黑色填充 */
+            .option-marker.selected::after {
+                content: none !important;
+            }
+            
+            /* 确保所有文本都是黑色的 */
+            * {
+                color: black !important;
+            }
+            
+            /* 允许页面内部内容自动分页 */
+            .answer-sheet {
+                page-break-inside: auto;
+            }
+            
+            /* 确保主观题大题在页面分割时保持完整性 */
+            .subjective-major-question {
+                page-break-inside: avoid;
+            }
+        }
+        
+        /* 标准答题卡容器 */
+        .answer-sheet {
+            width: 100%;
+            min-height: 281mm;
+            border: 1.5px solid #2196f3;
+            padding: 9mm;
+            position: relative;
+            background-color: #ffffff;
+            border-radius: 2px;
+            box-shadow: inset 0 0 3px rgba(33, 150, 243, 0.15);
+        }
+        
+        /* 装订虚线 */
+        .answer-sheet::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -1mm;
+            height: 100%;
+            width: 1px;
+            border-left: 1px dashed #666;
+            z-index: 5;
+        }
+        
+        /* 装订线左侧填写信息 */
+        .binding-info {
+            position: absolute;
+            top: 30mm;
+            left: 2mm;
+            display: flex;
+            flex-direction: column;
+            gap: 50mm;
+            z-index: 4;
+            width: 15mm;
+        }
+        
+        .binding-info-item {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            gap: 2mm;
+            width: 100%;
+        }
+        
+        .binding-info-label {
+            font-weight: bold;
+            font-size: 6pt;
+            color: #2c3e50;
+            white-space: nowrap;
+            text-align: right;
+            transform: rotate(-90deg);
+            transform-origin: center center;
+            width: 4mm;
+            height: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            writing-mode: vertical-rl;
+            text-orientation: upright;
+        }
+        
+        .binding-info-input {
+            width: 0.8mm;
+            height: 35mm;
+            border: none;
+            border-left: 1.5px solid #34495e;
+            background-color: transparent;
+        }
+        
+        /* 定位点 */
+        .position-marker {
+            width: 5.5mm;
+            height: 5.5mm;
+            border: 2px solid #1a1a1a;
+            border-radius: 50%;
+            position: absolute;
+            background-color: #ffffff;
+            z-index: 10;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+            transition: all 0.2s ease;
+        }
+        
+        .position-marker.top-left { top: 5mm; left: 5mm; }
+        .position-marker.top-right { top: 5mm; right: 5mm; }
+        .position-marker.bottom-left { bottom: 5mm; left: 5mm; }
+        .position-marker.bottom-right { bottom: 5mm; right: 5mm; }
+        .position-marker.middle-left { top: 50%; left: 5mm; transform: translateY(-50%); }
+        .position-marker.middle-right { top: 50%; right: 5mm; transform: translateY(-50%); }
+        .position-marker.middle-top { top: 5mm; left: 50%; transform: translateX(-50%); }
+        .position-marker.middle-bottom { bottom: 5mm; left: 50%; transform: translateX(-50%); }
+        
+        /* 标题 */
+        .sheet-title {
+            text-align: center;
+            font-size: 20pt;
+            font-weight: bold;
+            margin-bottom: 10mm;
+            color: #1565c0;
+            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.18);
+            letter-spacing: 1.5px;
+            padding-bottom: 2mm;
+            border-bottom: 2px solid #2196f3;
+        }
+        
+        /* 信息区域 */
+        .info-section {
+            display: flex;
+            margin-bottom: 8mm;
+            flex-wrap: nowrap;
+            justify-content: space-between;
+            align-items: stretch;
+        }
+        
+        /* 学生信息 */
+        .student-info {
+            width: 70mm;
+            background-color: #ffffff;
+            border: 1px solid #e9ecef;
+            border-radius: 3px;
+            padding: 2.5mm;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+        
+        .info-row {
+            display: flex;
+            margin-bottom: 3mm;
+            align-items: center;
+        }
+        
+        .info-row:last-child {
+            margin-bottom: 0;
+        }
+        
+        .info-label {
+            width: 24mm;
+            text-align: right;
+            margin-right: 4mm;
+            font-weight: bold;
+            font-size: 9pt;
+            color: #2c3e50;
+            white-space: nowrap;
+        }
+        
+        .info-input {
+            width: 45mm;
+            height: 6.5mm;
+            border: 1px solid #34495e;
+            border-radius: 2px;
+            padding: 0.5mm 2mm;
+            font-size: 9pt;
+            background-color: #ffffff;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.07);
+            transition: border-color 0.2s ease;
+        }
+        
+        /* 特殊状态区域 */
+        .special-status {
+            margin-top: 3mm;
+            padding-top: 3mm;
+            border-top: 1px solid #e9ecef;
+            display: flex;
+            flex-direction: row;
+            gap: 4mm;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .status-row {
+            display: flex;
+            align-items: center;
+            flex: 1;
+        }
+        
+        .status-label {
+            width: 18mm;
+            text-align: right;
+            margin-right: 3mm;
+            font-weight: bold;
+            font-size: 9pt;
+            color: #2c3e50;
+            white-space: nowrap;
+        }
+        
+        .status-marker {
+            width: 6mm;
+            height: 6mm;
+            border: 1.5px solid #34495e;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background-color: #ffffff;
+            border-radius: 2px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .status-marker:hover {
+            background-color: #f8f9fa;
+            border-color: #2c3e50;
+        }
+        
+        .status-marker.selected {
+            background-color: #34495e;
+            border-color: #2c3e50;
+        }
+        
+        .status-marker.selected::after {
+            content: '✓';
+            color: #ffffff;
+            font-size: 8pt;
+            font-weight: bold;
+        }
+        
+        /* 分数区域样式 */
+        .score-section {
+            margin-top: 3mm;
+            padding-top: 3mm;
+            border-top: 1px solid #e9ecef;
+            display: flex;
+            flex-direction: column;
+            gap: 3mm;
+        }
+        
+        .score-table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid #34495e;
+        }
+        
+        .score-header {
+            color: #2c3e50;
+            font-size: 8.5pt;
+            padding: 2mm;
+            text-align: center;
+            border: 1px solid #34495e;
+        }
+        
+        .score-table tbody {
+            border: 1px solid #34495e;
+        }
+        
+        .score-table tr {
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .score-table tr:last-child {
+            border-bottom: none;
+        }
+        
+        .score-label {
+            width: 40%;
+            text-align: center;
+            padding: 2mm 4mm;
+            font-weight: bold;
+            font-size: 8.5pt;
+            color: #2c3e50;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .score-value {
+            width: 60%;
+            text-align: center;
+            padding: 2mm;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .score-input {
+            width: 25mm;
+            height: 8mm;
+            border: 1.5px solid #34495e;
+            border-radius: 2px;
+            background-color: #ffffff;
+            display: inline-block;
+        }
+        
+        /* 准考证号 */
+        .exam-id-section {
+            width: 100mm;
+            background-color: #ffffff;
+            border: 1px solid #e9ecef;
+            border-radius: 3px;
+            padding: 2.5mm;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+        
+        .exam-id-title {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 3mm;
+            font-size: 9pt;
+            color: #2c3e50;
+            padding-bottom: 1.5mm;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .exam-id-grid {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .id-digits {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1mm;
+        }
+        
+        .id-digit {
+            width: 8mm;
+            text-align: center;
+            font-size: 7.5pt;
+            font-weight: bold;
+            color: #34495e;
+            background-color: #f8f9fa;
+            border-radius: 2px;
+            padding: 0.3mm;
+        }
+        
+        /* 准考证号手写区域 */
+        .id-handwriting {
+            display: flex;
+            justify-content: space-between;
+            margin: 2mm 0;
+        }
+        
+        .handwriting-box {
+            width: 8mm;
+            height: 8mm;
+            border: 1.5px solid #34495e;
+            font-size: 7pt;
+            text-align: center;
+            line-height: 8mm;
+            background-color: #ffffff;
+            border-radius: 1px;
+        }
+        
+        .id-markers {
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .id-number-column {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .id-marker {
+            width: 5mm;
+            height: 5mm;
+            border: 1.5px solid #34495e;
+            margin-bottom: 0.8mm;
+            font-size: 6pt;
+            text-align: center;
+            line-height: 5mm;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background-color: #ffffff;
+            border-radius: 1px;
+        }
+        
+        .id-marker:hover {
+            background-color: #f8f9fa;
+            border-color: #2c3e50;
+        }
+        
 
-    <title>新一代信息技术</title>
-    <link rel="stylesheet" href="css.css">
+        
+
+        
+        /* 选择题区域 */
+        .questions-section {
+            margin-bottom: 8mm;
+            padding: 2mm;
+            background-color: #ffffff;
+            border: 1px solid #bbdefb;
+            border-radius: 4px;
+        }
+
+        /* 选择题组样式 */
+        .choice-group {
+            border: 1px dashed #1565c0;
+            padding: 1.5mm;
+            margin: 1mm;
+            border-radius: 4px;
+            background-color: #ffffff;
+        }
+        
+        /* 主观题区域 */
+        .subjective-section {
+            margin-bottom: 8mm;
+            padding: 2mm;
+            background-color: #ffffff;
+            border: 1px solid #bbdefb;
+            border-radius: 4px;
+        }
+        
+        .section-title {
+            font-size: 10pt;
+            font-weight: bold;
+            color: #1565c0;
+            margin-bottom: 3mm;
+            text-align: center;
+        }
+        
+        .subjective-questions {
+            display: flex;
+            flex-direction: column;
+            gap: 4mm;
+        }
+        
+        .subjective-question {
+            display: flex;
+            align-items: flex-start;
+            gap: 2mm;
+        }
+        
+        .subjective-number {
+            font-size: 9pt;
+            font-weight: bold;
+            color: #1565c0;
+            width: 10mm;
+            text-align: right;
+            flex-shrink: 0;
+            margin-top: 1mm;
+        }
+        
+        .subjective-content {
+            flex: 1;
+            min-height: 40mm;
+            border-left: 1px solid #e0e0e0;
+            padding-left: 2mm;
+        }
+        
+        .subjective-lines {
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(to bottom, #e0e0e0 0.5mm, transparent 0.5mm);
+            background-size: 100% 4mm;
+            background-position: top left;
+        }
+        
+        /* 主观题大题样式 */
+        .subjective-major-question {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 5mm;
+            border: 1px dashed #1565c0;
+            padding: 2mm;
+            border-radius: 4px;
+            position: relative;
+        }
+        
+        .subjective-major-number {
+            font-size: 9pt;
+            font-weight: bold;
+            color: #1565c0;
+            width: auto;
+            text-align: left;
+            flex-shrink: 0;
+            margin-top: -2mm;
+            margin-left: -2mm;
+            position: absolute;
+            top: 2mm;
+            left: 2mm;
+            padding-right: 3mm;
+            background-color: #ffffff;
+        }
+        
+        .subjective-major-content {
+            flex: 1;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            gap: 3mm 5mm;
+            align-items: center;
+            padding: 4mm 0 1mm 15mm;
+        }
+        
+        /* 主观题小题样式 */
+        .subjective-minor-question {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            flex: 0 1 auto;
+            min-width: 120px;
+        }
+        
+        .subjective-minor-number {
+            font-size: 8pt;
+            font-weight: bold;
+            color: #1565c0;
+            width: auto;
+            min-width: 8mm;
+            text-align: left;
+            flex-shrink: 0;
+            white-space: nowrap;
+            padding-right: 0;
+            margin-right: -2px;
+        }
+        
+        .subjective-minor-line {
+            flex: 1;
+            height: 1px;
+            background-color: #34495e;
+            margin-top: 0;
+            margin-left: 0;
+            min-width: 50px;
+            cursor: col-resize;
+            position: relative;
+        }
+        
+        /* 横线拖拽手柄样式 */
+        .subjective-minor-line::after {
+            content: '';
+            position: absolute;
+            right: -3px;
+            top: -4px;
+            width: 6px;
+            height: 9px;
+            background-color: #1565c0;
+            border-radius: 2px;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+        
+        .subjective-minor-line:hover::after,
+        .subjective-minor-line.dragging::after {
+            opacity: 1;
+        }
+        
+        /* 拖拽时的样式 */
+        .subjective-minor-line.dragging {
+            cursor: col-resize;
+        }
+        
+        .subjective-minor-line.dragging::after {
+            opacity: 1;
+            background-color: #ff9800;
+        }
+        
+        .questions-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .questions-table td {
+            padding: 1mm;
+            text-align: center;
+            vertical-align: middle;
+        }
+        
+        .question-cell {
+            width: auto;
+            text-align: center;
+            vertical-align: middle;
+            padding: 0.8mm !important;
+        }
+        
+        .question-content {
+            display: flex;
+            align-items: center;
+            gap: 0.8mm;
+        }
+        
+        .question-number {
+            font-size: 7pt;
+            font-weight: bold;
+            color: #1976d2;
+            text-align: right;
+            width: 7mm;
+        }
+        
+        .options {
+            display: flex;
+            align-items: center;
+            gap: 1mm;
+        }
+        
+        .option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .option-marker {
+            width: 4.5mm;
+            height: 4.5mm;
+            border: 1.5px solid #2196f3;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            position: relative;
+            background-color: #ffffff;
+            border-radius: 2px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .option-letter {
+            font-size: 6pt;
+            font-weight: bold;
+            color: #1565c0;
+            text-align: center;
+            line-height: 4.5mm;
+            pointer-events: none;
+        }
+        
+        .option-marker:hover {
+            background-color: #bbdefb;
+            border-color: #42a5f5;
+            box-shadow: 0 2px 8px rgba(33, 150, 243, 0.3);
+            transform: translateY(-1px);
+        }
+        
+        .option-marker.selected {
+            background-color: #1976d2;
+            border-color: #1565c0;
+            box-shadow: 0 3px 10px rgba(25, 118, 210, 0.45);
+        }
+        
+        .option-marker.selected::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #ffffff;
+            font-size: 6.5pt;
+            font-weight: bold;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+        
+
+        
+        /* 控制面板 */
+        .control-panel {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #fff;
+            border: 1px solid #e0e0e0;
+            padding: 18px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1000;
+            width: 280px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .control-panel:hover {
+            box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+        }
+        
+        .control-panel h3 {
+            margin-bottom: 15px;
+            color: #2c3e50;
+            font-size: 18px;
+            text-align: center;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #3498db;
+        }
+        
+        .control-group {
+            margin-bottom: 15px;
+        }
+        
+        .control-label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+            font-size: 13px;
+            color: #34495e;
+        }
+        
+        .control-input {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid #bdc3c7;
+            border-radius: 4px;
+            font-size: 13px;
+            transition: border-color 0.2s ease;
+        }
+        
+        .control-input:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 2px rgba(52,152,219,0.2);
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 9px;
+            margin-top: 8px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: bold;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .btn:hover {
+            background-color: #2980b9;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(52,152,219,0.3);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn-warning {
+            background-color: #f39c12;
+        }
+        
+        .btn-warning:hover {
+            background-color: #e67e22;
+            box-shadow: 0 2px 8px rgba(243,156,18,0.3);
+        }
+        
+        .btn-danger {
+            background-color: #e74c3c;
+        }
+        
+        .btn-danger:hover {
+            background-color: #c0392b;
+            box-shadow: 0 2px 8px rgba(231,76,60,0.3);
+        }
+        
+        .btn-small {
+            width: auto;
+            padding: 4px 8px;
+            font-size: 11px;
+            margin-top: 0;
+            margin-left: 8px;
+            display: inline-block;
+            text-transform: none;
+        }
+        
+        .error {
+            color: #f44336;
+            font-size: 10px;
+            margin-top: 2px;
+        }
+    </style>
 </head>
 <body>
-<div class="container">
-    <a href="http://38.246.252.230:8083" target="_blank">AI</a>
-    <a href="http://38.246.252.230:8123" target="_blank">HomeAssistant</a>
-</div>
+    <!-- 控制面板 -->
+    <div class="control-panel">
+        <h3>答题卡配置</h3>
+        
+
+        
+        <div class="control-group">
+            <label class="control-label">试卷名称</label>
+            <input type="text" class="control-input" id="paperName" value="标准答题卡" placeholder="请输入试卷名称">
+        </div>
+        
+        <div class="control-group">
+            <label class="control-label">准考证号位数</label>
+            <select class="control-input" id="idDigitCount">
+                <option value="8">8位</option>
+                <option value="9">9位</option>
+                <option value="10">10位</option>
+                <option value="11">11位</option>
+                <option value="12" selected>12位</option>
+                <option value="13">13位</option>
+                <option value="14">14位</option>
+                <option value="15">15位</option>
+            </select>
+        </div>
+        
+
+        
+        <div class="control-group">
+            <label class="control-label">选择题数量 (1-70)</label>
+            <input type="number" class="control-input" id="choiceCount" min="1" max="70" value="30" placeholder="请输入选择题数量">
+            <div class="error" id="choiceCountError"></div>
+        </div>
+        
+        <!-- 主观题配置 -->
+        <div class="control-group">
+            <label class="control-label">主观题大题数量 (1-20)</label>
+            <input type="number" class="control-input" id="subjectiveMajorCount" min="1" max="20" value="3" placeholder="请输入主观题大题数量">
+            <button class="btn btn-small" onclick="generateSubjectiveMinorInputs()">生成小题配置</button>
+        </div>
+        
+        <div class="control-group">
+            <label class="control-label">主观题行间距 (mm)</label>
+            <input type="number" class="control-input" id="subjectiveLineSpacing" min="2" max="10" step="0.5" value="4" placeholder="请输入行间距（单位：mm）">
+        </div>
+
+        <!-- 主观题小题数量配置区域 -->
+        <div id="subjectiveMinorInputs"></div>
+        
+        <button class="btn" onclick="updateAnswerSheet()">更新答题卡</button>
+        <button class="btn btn-warning" onclick="window.print()">打印答题卡</button>
+        <button class="btn btn-danger" onclick="clearAnswers()">清除答案</button>
+        <button class="btn" onclick="saveData()">保存数据</button>
+    </div>
+    
+    <!-- A4纸张 -->
+    <div class="a4-paper">
+        <!-- 装订线左侧填写信息 -->
+        <div class="binding-info">
+            <div class="binding-info-item">
+                <span class="binding-info-label">学校</span>
+                <div class="binding-info-input" id="printSchool"></div>
+            </div>
+            <div class="binding-info-item">
+                <span class="binding-info-label">班级</span>
+                <div class="binding-info-input" id="printClass"></div>
+            </div>
+            <div class="binding-info-item">
+                <span class="binding-info-label">姓名</span>
+                <div class="binding-info-input" id="printName"></div>
+            </div>
+        </div>
+        
+        <!-- 标准答题卡 -->
+        <div class="answer-sheet">
+            <!-- 定位点 -->
+            <div class="position-marker top-left"></div>
+            <div class="position-marker top-right"></div>
+            <div class="position-marker bottom-left"></div>
+            <div class="position-marker bottom-right"></div>
+            <div class="position-marker middle-left"></div>
+            <div class="position-marker middle-right"></div>
+            <div class="position-marker middle-top"></div>
+            <div class="position-marker middle-bottom"></div>
+            
+            <!-- 标题 -->
+            <div class="sheet-title">标准答题卡</div>
+            
+            <!-- 学生信息区域 -->
+            <div class="info-section">
+                <!-- 准考证号 -->
+                <div class="exam-id-section">
+                    <div class="exam-id-title">准考证号</div>
+                    <div class="exam-id-grid">
+                        <div class="id-digits" id="idDigits"></div>
+                        <div class="id-handwriting" id="idHandwriting"></div>
+                        <div class="id-markers" id="idMarkers"></div>
+                    </div>
+                </div>
+                
+                <!-- 学生信息 -->
+                <div class="student-info">
+                    <div class="info-row">
+                        <span class="info-label">姓名：</span>
+                        <div class="info-input" id="printStudentName"></div>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">班级：</span>
+                        <div class="info-input" id="printStudentClass"></div>
+                    </div>
+                    <div class="special-status">
+                        <div class="status-row">
+                            <span class="status-label">缺考：</span>
+                            <div class="status-marker" id="absentMarker" data-status="absent"></div>
+                        </div>
+                        <div class="status-row">
+                            <span class="status-label">作弊：</span>
+                            <div class="status-marker" id="cheatingMarker" data-status="cheating"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- 分数区域 -->
+                    <div class="score-section">
+                        <table class="score-table">
+                            <thead>
+                                <tr>
+                                    <th class="score-header">分数类型</th>
+                                    <th class="score-header">得分</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="score-label">客观题分数</td>
+                                    <td class="score-value"><div class="score-input" id="objectiveScore"></div></td>
+                                </tr>
+                                <tr>
+                                    <td class="score-label">主观题分数</td>
+                                    <td class="score-value"><div class="score-input" id="subjectiveScore"></div></td>
+                                </tr>
+                                <tr>
+                                    <td class="score-label">总分</td>
+                                    <td class="score-value"><div class="score-input" id="totalScore"></div></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+
+            
+            <!-- 选择题区域 - 表格布局 -->
+            <div class="questions-section">
+                <table class="questions-table" id="questionsTable"></table>
+            </div>
+
+            <!-- 主观题答题区域 -->
+            <div class="subjective-section">
+                <h3 class="section-title">主观题答题区</h3>
+                <div class="subjective-questions">
+                    <!-- 主观题1 -->
+                    <div class="subjective-question">
+                        <div class="subjective-number">1.</div>
+                        <div class="subjective-content">
+                            <div class="subjective-lines"></div>
+                        </div>
+                    </div>
+                    <!-- 主观题2 -->
+                    <div class="subjective-question">
+                        <div class="subjective-number">2.</div>
+                        <div class="subjective-content">
+                            <div class="subjective-lines"></div>
+                        </div>
+                    </div>
+                    <!-- 主观题3 -->
+                    <div class="subjective-question">
+                        <div class="subjective-number">3.</div>
+                        <div class="subjective-content">
+                            <div class="subjective-lines"></div>
+                        </div>
+                    </div>
+                    <!-- 主观题4 -->
+                    <div class="subjective-question">
+                        <div class="subjective-number">4.</div>
+                        <div class="subjective-content">
+                            <div class="subjective-lines"></div>
+                        </div>
+                    </div>
+                    <!-- 主观题5 -->
+                    <div class="subjective-question">
+                        <div class="subjective-number">5.</div>
+                        <div class="subjective-content">
+                            <div class="subjective-lines"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    
+    <script>
+        // 全局变量
+        let currentAnswers = {
+            choices: {},
+            status: {}
+        };
+        
+        // 存储主观题横线宽度
+        let lineWidths = {};
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 设置初始试卷名称
+            document.querySelector('.sheet-title').textContent = document.getElementById('paperName').value;
+            generateExamIdMarkers();
+            generateChoiceQuestions();
+            
+            // 生成初始主观题配置
+            generateSubjectiveMinorInputs();
+            // 生成初始主观题
+            generateSubjectiveQuestions();
+            
+            // 为准考证号位数选择框添加change事件监听器
+            document.getElementById('idDigitCount').addEventListener('change', function() {
+                updateAnswerSheet();
+            });
+            
+            // 为特殊状态标记添加点击事件监听器
+            document.querySelectorAll('.status-marker').forEach(marker => {
+                marker.addEventListener('click', function() {
+                    const status = this.dataset.status;
+                    selectSpecialStatus(status);
+                });
+            });
+        });
+        
+
+        
+        // 验证选择题数量
+        function validateChoiceCount(count) {
+            const errorElement = document.getElementById('choiceCountError');
+            if (count < 1 || count > 70) {
+                errorElement.textContent = '选择题数量必须在1-70之间';
+                return false;
+            }
+            errorElement.textContent = '';
+            return true;
+        }
+        
+        // 生成准考证号组件（数字标签、手写框、机器可读标记）
+        function generateExamIdMarkers(examId = '') {
+            const digitCount = parseInt(document.getElementById('idDigitCount').value);
+            
+            // 1. 生成数字标签
+            const idDigitsContainer = document.getElementById('idDigits');
+            idDigitsContainer.innerHTML = '';
+            for (let i = 1; i <= digitCount; i++) {
+                const digitElement = document.createElement('div');
+                digitElement.className = 'id-digit';
+                digitElement.textContent = i;
+                idDigitsContainer.appendChild(digitElement);
+            }
+            
+            // 2. 生成手写框
+            const idHandwritingContainer = document.getElementById('idHandwriting');
+            idHandwritingContainer.innerHTML = '';
+            for (let i = 1; i <= digitCount; i++) {
+                const boxElement = document.createElement('div');
+                boxElement.className = 'handwriting-box';
+                idHandwritingContainer.appendChild(boxElement);
+            }
+            
+            // 3. 生成机器可读标记
+            const idMarkersContainer = document.getElementById('idMarkers');
+            idMarkersContainer.innerHTML = '';
+            for (let i = 1; i <= digitCount; i++) {
+                const column = document.createElement('div');
+                column.className = 'id-number-column';
+                column.id = `idColumn${i}`;
+                
+                for (let j = 0; j < 10; j++) {
+                    const marker = document.createElement('div');
+                    marker.className = 'id-marker';
+                    marker.textContent = j;
+                    
+                    // 如果准考证号对应位置的数字等于当前数字，则标记
+                    if (examId && examId[i - 1] === j.toString()) {
+                        marker.style.backgroundColor = '#000';
+                        marker.style.color = '#fff';
+                    }
+                    
+                    column.appendChild(marker);
+                }
+                
+                idMarkersContainer.appendChild(column);
+            }
+        }
+        
+        // 生成选择题
+        function generateChoiceQuestions(questionCount = 30) {
+            const table = document.getElementById('questionsTable');
+            table.innerHTML = '';
+            
+            // 计算组数，每组显示5道题（五个题一组，纵向排列）
+            const questionsPerGroup = 5;
+            const groupsCount = Math.ceil(questionCount / questionsPerGroup);
+            
+            // 每行显示4个组
+            const groupsPerRow = 4;
+            const rowsCount = Math.ceil(groupsCount / groupsPerRow);
+            
+            // 为每行创建组
+            for (let rowIndex = 0; rowIndex < rowsCount; rowIndex++) {
+                // 创建一个包含整行所有组的行
+                const row = table.insertRow();
+                row.style.padding = '0';
+                
+                // 为当前行的每个组创建单元格
+                for (let groupInRowIndex = 0; groupInRowIndex < groupsPerRow; groupInRowIndex++) {
+                    const groupIndex = rowIndex * groupsPerRow + groupInRowIndex;
+                    
+                    // 创建组单元格
+                    const groupCell = row.insertCell();
+                    groupCell.style.padding = '0';
+                    groupCell.style.verticalAlign = 'top';
+                    
+                    // 如果已经超过组数，创建空单元格
+                    if (groupIndex >= groupsCount) {
+                        groupCell.style.width = '25%';
+                        continue;
+                    }
+                    
+                    // 创建组容器（带虚线框）
+                    const groupContainer = document.createElement('div');
+                    groupContainer.className = 'choice-group';
+                    groupContainer.style.width = '100%';
+                    
+                    // 创建组标题
+                    const groupTitle = document.createElement('div');
+                    groupTitle.style.textAlign = 'center';
+                    groupTitle.style.fontWeight = 'bold';
+                    groupTitle.style.color = '#1565c0';
+                    groupTitle.style.fontSize = '7pt';
+                    groupTitle.style.marginBottom = '1mm';
+                    groupTitle.textContent = `第${groupIndex + 1}组`;
+                    
+                    // 添加标题到组容器
+                    groupContainer.appendChild(groupTitle);
+                    
+                    // 创建组表格
+                    const groupTable = document.createElement('table');
+                    groupTable.style.width = '100%';
+                    groupTable.style.borderCollapse = 'collapse';
+                    
+                    // 为组创建5道题（垂直排列）
+                    for (let questionInGroupIndex = 0; questionInGroupIndex < questionsPerGroup; questionInGroupIndex++) {
+                        const questionNumber = groupIndex * questionsPerGroup + questionInGroupIndex + 1;
+                        
+                        // 如果已经超过题目总数，创建空行
+                        if (questionNumber > questionCount) {
+                            const emptyRow = groupTable.insertRow();
+                            const emptyCell = emptyRow.insertCell();
+                            emptyCell.style.height = '12mm'; // 与其他题行保持一致的高度
+                            continue;
+                        }
+                        
+                        // 创建题行
+                        const questionRow = groupTable.insertRow();
+                        
+                        // 创建题单元格
+                        const questionCell = questionRow.insertCell();
+                        questionCell.className = 'question-cell';
+                        
+                        // 创建题目内容
+                        const questionContent = document.createElement('div');
+                        questionContent.className = 'question-content';
+                        
+                        // 题目序号
+                        const numberElement = document.createElement('div');
+                        numberElement.className = 'question-number';
+                        numberElement.textContent = `${questionNumber}.`;
+                        // 添加点击修改功能
+                        numberElement.addEventListener('click', function() {
+                            editQuestionNumber(questionNumber, this);
+                        });
+                        
+                        // 选项容器
+                        const optionsElement = document.createElement('div');
+                        optionsElement.className = 'options';
+                        
+                        // 生成选项
+                        const options = ['A', 'B', 'C', 'D'];
+                        options.forEach(option => {
+                            const optionElement = document.createElement('div');
+                            optionElement.className = 'option';
+                            
+                            const markerElement = document.createElement('div');
+                            markerElement.className = 'option-marker';
+                            markerElement.dataset.question = questionNumber;
+                            markerElement.dataset.option = option;
+                            
+                            // 将选项字母直接放在框内
+                            const optionLetter = document.createElement('span');
+                            optionLetter.className = 'option-letter';
+                            optionLetter.textContent = option;
+                            markerElement.appendChild(optionLetter);
+                            
+                            // 添加点击事件
+                            markerElement.addEventListener('click', function(e) {
+                                // 阻止事件冒泡和默认行为
+                                e.preventDefault();
+                                e.stopPropagation();
+                                // 确保传递正确的questionNumber
+                                selectChoiceOption(questionNumber, option);
+                            });
+                            
+                            optionElement.appendChild(markerElement);
+                            optionsElement.appendChild(optionElement);
+                        });
+                        
+                        questionContent.appendChild(numberElement);
+                        questionContent.appendChild(optionsElement);
+                        questionCell.appendChild(questionContent);
+                    }
+                    
+                    // 将组表格添加到组容器
+                    groupContainer.appendChild(groupTable);
+                    
+                    // 将组容器添加到组单元格
+                    groupCell.appendChild(groupContainer);
+                }
+            }
+        }
+        
+
+        
+        // 选择选择题选项
+        function selectChoiceOption(questionNumber, selectedOption) {
+            // 确保questionNumber是数字类型
+            const qNum = parseInt(questionNumber);
+            
+            // 如果qNum不是有效数字，直接返回
+            if (isNaN(qNum)) {
+                console.error('Invalid question number:', questionNumber);
+                return;
+            }
+            
+            // 找到当前选择的标记
+            const selectedMarker = document.querySelector(`.option-marker[data-question="${qNum}"][data-option="${selectedOption}"]`);
+            if (selectedMarker) {
+                // 切换选中状态
+                selectedMarker.classList.toggle('selected');
+                
+                // 更新答案存储
+                updateChoiceAnswers(qNum);
+            } else {
+                console.error('Selected marker not found:', { questionNumber: qNum, option: selectedOption });
+            }
+        }
+        
+        // 更新选择题答案
+        function updateChoiceAnswers(questionNumber) {
+            // 获取该题所有选中的选项
+            const selectedMarkers = document.querySelectorAll(`.option-marker[data-question="${questionNumber}"].selected`);
+            
+            // 提取选中的选项值
+            const selectedOptions = Array.from(selectedMarkers).map(marker => marker.dataset.option);
+            
+            // 保存答案（使用数组存储多个选项）
+            currentAnswers.choices[questionNumber] = selectedOptions;
+        }
+        
+        // 编辑题号
+        function editQuestionNumber(oldNumber, element) {
+            const newNumber = prompt(`请输入新的题号 (当前题号: ${oldNumber})`, oldNumber);
+            
+            // 验证输入
+            if (newNumber === null) return; // 用户取消
+            
+            const parsedNumber = parseInt(newNumber);
+            if (isNaN(parsedNumber) || parsedNumber < 1) {
+                alert('请输入有效的题号（正整数）');
+                return;
+            }
+            
+            // 更新显示的题号
+            element.textContent = `${parsedNumber}.`;
+            
+            // 更新选项标记的data-question属性
+            const questionContent = element.parentElement;
+            const markers = questionContent.querySelectorAll('.option-marker');
+            markers.forEach(marker => {
+                marker.dataset.question = parsedNumber;
+            });
+            
+            // 更新答案存储
+            if (currentAnswers.choices[oldNumber]) {
+                currentAnswers.choices[parsedNumber] = currentAnswers.choices[oldNumber];
+                delete currentAnswers.choices[oldNumber];
+            }
+        }
+        
+
+        
+        // 生成主观题小题配置输入框
+        function generateSubjectiveMinorInputs() {
+            const majorCount = parseInt(document.getElementById('subjectiveMajorCount').value) || 3;
+            const container = document.getElementById('subjectiveMinorInputs');
+            container.innerHTML = '';
+            
+            // 创建每个大题的小题数量输入
+            for (let i = 1; i <= majorCount; i++) {
+                const controlGroup = document.createElement('div');
+                controlGroup.className = 'control-group';
+                
+                const label = document.createElement('label');
+                label.className = 'control-label';
+                label.textContent = `第${i}大题小题数量 (1-10)`;
+                
+                const input = document.createElement('input');
+                input.type = 'number';
+                input.className = 'control-input';
+                input.id = `subjectiveMinorCount${i}`;
+                input.min = '1';
+                input.max = '10';
+                input.value = '3';
+                input.placeholder = `请输入第${i}大题的小题数量`;
+                
+                controlGroup.appendChild(label);
+                controlGroup.appendChild(input);
+                container.appendChild(controlGroup);
+            }
+        }
+        
+        // 中文数字转换函数
+        function numberToChinese(num) {
+            const chineseNumbers = ['', '一', '二', '三', '四', '五', '六', '七', '八', '九', '十'];
+            return chineseNumbers[num] || num;
+        }
+        
+        // 编辑大题序号
+        function editMajorQuestionNumber(oldNumber, element) {
+            const newNumber = prompt(`请输入新的大题序号 (当前序号: ${oldNumber})`, oldNumber);
+            
+            // 验证输入
+            if (newNumber === null) return; // 用户取消
+            
+            // 更新显示的序号
+            element.textContent = `${newNumber}.`;
+        }
+        
+        // 编辑小题序号
+        function editMinorQuestionNumber(oldNumber, element) {
+            const newNumber = prompt(`请输入新的小题序号 (当前序号: ${oldNumber})`, oldNumber);
+            
+            // 验证输入
+            if (newNumber === null) return; // 用户取消
+            
+            // 更新显示的序号
+            element.textContent = `${newNumber}`;
+        }
+        
+        // 生成主观题
+        function generateSubjectiveQuestions() {
+            const majorCount = parseInt(document.getElementById('subjectiveMajorCount').value) || 3;
+            const container = document.querySelector('.subjective-section .subjective-questions');
+            container.innerHTML = '';
+            
+            // 为每个大题生成题目
+            for (let majorIndex = 1; majorIndex <= majorCount; majorIndex++) {
+                const minorCount = parseInt(document.getElementById(`subjectiveMinorCount${majorIndex}`)?.value) || 3;
+                const majorChineseNumber = numberToChinese(majorIndex);
+                
+                // 创建大题容器
+                const majorQuestion = document.createElement('div');
+                majorQuestion.className = 'subjective-major-question';
+                
+                // 大题序号
+                const majorNumber = document.createElement('div');
+                majorNumber.className = 'subjective-major-number';
+                majorNumber.textContent = `${majorChineseNumber}.`;
+                // 添加点击修改功能
+                majorNumber.addEventListener('click', function() {
+                    editMajorQuestionNumber(majorChineseNumber, this);
+                });
+                
+                // 大题内容容器
+                const majorContent = document.createElement('div');
+                majorContent.className = 'subjective-major-content';
+                
+                // 为每个小题生成题目
+                for (let minorIndex = 1; minorIndex <= minorCount; minorIndex++) {
+                    const minorQuestion = document.createElement('div');
+                    minorQuestion.className = 'subjective-minor-question';
+                    
+                    // 小题序号
+                    const minorNumber = document.createElement('span');
+                    minorNumber.className = 'subjective-minor-number';
+                    minorNumber.textContent = `${minorIndex}.`;
+                    // 添加点击修改功能
+                    minorNumber.addEventListener('click', function() {
+                        editMinorQuestionNumber(minorIndex, this);
+                    });
+                    
+                    // 小题横线
+                    const minorLine = document.createElement('div');
+                    minorLine.className = 'subjective-minor-line';
+                    
+                    // 添加拖拽事件
+                    addDragEvents(minorLine);
+                    
+                    minorQuestion.appendChild(minorNumber);
+                    minorQuestion.appendChild(minorLine);
+                    majorContent.appendChild(minorQuestion);
+                }
+                
+                majorQuestion.appendChild(majorNumber);
+                majorQuestion.appendChild(majorContent);
+                container.appendChild(majorQuestion);
+            }
+        }
+        
+        // 拖拽调整横线宽度功能
+        function addDragEvents(lineElement) {
+            let isDragging = false;
+            let startX;
+            let startWidth;
+            let parentElement;
+            
+            // 鼠标按下事件
+            lineElement.addEventListener('mousedown', function(e) {
+                // 只有点击在拖拽手柄附近才允许拖拽（放宽检测范围）
+                const handleRect = lineElement.getBoundingClientRect();
+                const clickX = e.clientX;
+                const handleStartX = handleRect.right - 12; // 放宽到12px，更容易点击
+                
+                if (clickX < handleStartX || clickX > handleRect.right) {
+                    return;
+                }
+                
+                isDragging = true;
+                startX = e.clientX;
+                startWidth = lineElement.offsetWidth;
+                parentElement = lineElement.parentElement;
+                
+                // 添加拖拽样式
+                lineElement.classList.add('dragging');
+                document.body.style.cursor = 'col-resize';
+                
+                // 阻止默认行为和事件冒泡
+                e.preventDefault();
+                e.stopPropagation();
+            });
+            
+            // 鼠标移动事件
+            document.addEventListener('mousemove', function(e) {
+                if (!isDragging) return;
+                
+                // 计算新宽度
+                const deltaX = e.clientX - startX;
+                let newWidth = startWidth + deltaX;
+                
+                // 限制最小宽度
+                const minWidth = 50; // 与CSS中的min-width保持一致
+                if (newWidth < minWidth) {
+                    newWidth = minWidth;
+                }
+                
+                // 设置新宽度，保持flex布局
+                lineElement.style.width = `${newWidth}px`;
+                lineElement.style.flex = '0 1 auto'; // 保持flex属性，允许换行
+                
+                // 触发flex布局重排
+                if (parentElement.parentElement) {
+                    parentElement.parentElement.style.display = 'none';
+                    parentElement.parentElement.offsetHeight;
+                    parentElement.parentElement.style.display = 'flex';
+                }
+                
+                // 阻止默认行为和事件冒泡
+                e.preventDefault();
+                e.stopPropagation();
+            });
+            
+            // 鼠标释放事件
+            document.addEventListener('mouseup', function() {
+                if (!isDragging) return;
+                
+                isDragging = false;
+                
+                // 移除拖拽样式
+                lineElement.classList.remove('dragging');
+                document.body.style.cursor = '';
+                
+                // 保存当前横线长度到全局存储
+                saveLineWidth(lineElement);
+                
+                // 鼠标释放后，确保flex容器正确重排
+                if (parentElement.parentElement) {
+                    parentElement.parentElement.style.display = 'none';
+                    parentElement.parentElement.offsetHeight; // 触发重排
+                    parentElement.parentElement.style.display = 'flex';
+                }
+            });
+        }
+        
+        // 保存横线宽度
+        function saveLineWidth(lineElement) {
+            const parentQuestion = lineElement.closest('.subjective-major-question');
+            const questionIndex = Array.from(document.querySelectorAll('.subjective-major-question')).indexOf(parentQuestion) + 1;
+            const minorQuestion = lineElement.closest('.subjective-minor-question');
+            const minorIndex = Array.from(parentQuestion.querySelectorAll('.subjective-minor-question')).indexOf(minorQuestion) + 1;
+            
+            lineWidths[`${questionIndex}-${minorIndex}`] = lineElement.offsetWidth;
+        }
+        
+        // 恢复所有横线宽度
+        function restoreLineWidths() {
+            document.querySelectorAll('.subjective-minor-line').forEach(lineElement => {
+                const parentQuestion = lineElement.closest('.subjective-major-question');
+                const questionIndex = Array.from(document.querySelectorAll('.subjective-major-question')).indexOf(parentQuestion) + 1;
+                const minorQuestion = lineElement.closest('.subjective-minor-question');
+                const minorIndex = Array.from(parentQuestion.querySelectorAll('.subjective-minor-question')).indexOf(minorQuestion) + 1;
+                
+                const key = `${questionIndex}-${minorIndex}`;
+                if (lineWidths[key]) {
+                    lineElement.style.width = `${lineWidths[key]}px`;
+                }
+            });
+        }
+        
+        // 更新答题卡
+        function updateAnswerSheet() {
+            // 获取配置
+            const paperName = document.getElementById('paperName').value;
+            const digitCount = parseInt(document.getElementById('idDigitCount').value);
+            const choiceCount = parseInt(document.getElementById('choiceCount').value) || 30;
+            
+            // 验证选择题数量
+            const isCountValid = validateChoiceCount(choiceCount);
+            
+            // 更新打印区域
+            document.querySelector('.sheet-title').textContent = paperName;
+            
+            // 更新准考证号标记
+            generateExamIdMarkers();
+            
+            // 只有当选择题数量验证通过时，才重新生成选择题
+            if (isCountValid) {
+                generateChoiceQuestions(choiceCount);
+                // 生成主观题
+                generateSubjectiveQuestions();
+                // 设置主观题行间距
+                setSubjectiveLineSpacing();
+                // 恢复横线宽度
+                setTimeout(restoreLineWidths, 0);
+            }
+        }
+        
+        // 设置主观题行间距
+        function setSubjectiveLineSpacing() {
+            // 获取行间距值
+            const lineSpacing = parseFloat(document.getElementById('subjectiveLineSpacing').value) || 4;
+            
+            // 获取所有主观题行
+            const subjectiveLines = document.querySelectorAll('.subjective-lines');
+            
+            // 设置行间距
+            subjectiveLines.forEach(lines => {
+                lines.style.backgroundSize = `100% ${lineSpacing}mm`;
+            });
+        }
+        
+        // 选择特殊状态
+        function selectSpecialStatus(status) {
+            const marker = document.querySelector(`.status-marker[data-status="${status}"]`);
+            const isSelected = marker.classList.contains('selected');
+            
+            // 清除该状态的选择
+            marker.classList.toggle('selected');
+            
+            // 更新答案数据
+            if (marker.classList.contains('selected')) {
+                currentAnswers.status[status] = true;
+            } else {
+                delete currentAnswers.status[status];
+            }
+        }
+        
+        // 清除答案
+        function clearAnswers() {
+            // 清除所有选择题选项标记
+            const choiceMarkers = document.querySelectorAll('.option-marker');
+            choiceMarkers.forEach(marker => {
+                marker.classList.remove('selected');
+            });
+            
+            // 清除所有特殊状态标记
+            const statusMarkers = document.querySelectorAll('.status-marker');
+            statusMarkers.forEach(marker => {
+                marker.classList.remove('selected');
+            });
+            
+            // 清除答案数据
+            currentAnswers = {
+                choices: {},
+                status: {}
+            };
+        }
+        
+        // 保存数据
+        function saveData() {
+            const data = {
+                answers: currentAnswers,
+                generationTime: new Date().toISOString()
+            };
+            
+            // 创建下载链接
+            const dataStr = JSON.stringify(data, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `compact_answer_sheet_${new Date().getTime()}.json`;
+            link.click();
+            
+            // 释放URL
+            URL.revokeObjectURL(url);
+        }
+        
+
+    </script>
 </body>
 </html>
